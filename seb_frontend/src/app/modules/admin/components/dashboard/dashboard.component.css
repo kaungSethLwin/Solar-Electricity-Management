@@ -1,0 +1,96 @@
+.table-cell-padding {
+    padding: 10px; /* Adjust the padding as needed */
+  }
+  
+  /* Custom Button Styles */
+.custom-button {
+    background-color: transparent; /* Transparent background */
+    border: 1px solid #ccc; /* Light border color */
+    color: #c9bebe; /* Dark text color */
+    padding: 10px 20px; /* Padding for the button */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Font size for better readability */
+    transition: all 0.3s ease;
+    margin: 30px 40px; /* Smooth transition for hover effects */
+  }
+  
+  .custom-button:hover {
+    background-color: #f8f9fa; /* Light background on hover */
+    border-color: #007bff; /* Border color on hover */
+    color: #007bff; /* Text color on hover */
+  }
+  
+  .nav-link {
+    text-decoration: none; /* Remove underline */
+  }
+  
+  .nav-pills .nav-link {
+    border-radius: 4px; /* Rounded corners for nav pills */
+  }
+  
+  header {
+    background-color: #23171b; /* Light background for header */
+    padding: 20px; /* Padding for the header */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for modern look */
+  }
+  
+  h1 {
+    color: #a3b9cf; /* Dark color for the heading */
+  }
+  
+
+  .register-button {
+    position: sticky;
+    bottom: 10px; /* Adjust this value to control the distance from the bottom */
+    right: 10px; /* Adjust this value to control the distance from the right */
+    background-color: #2ada8b; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none;
+    border-radius: 4px; /* Rounded corners */
+    padding: 10px 20px; /* Padding inside the button */
+    font-size: 16px; /* Font size */
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth effect */
+    transition: background-color 0.3s ease; 
+    margin-left: 10px;/* Smooth background color transition */
+  }
+  
+  .register-button:hover {
+    background-color: #0056b3; /* Darker color on hover */
+  }
+  
+  .register-button i {
+    font-size: 18px; /* Adjust icon size */
+  }
+  
+
+  .status-unpaid {
+    background-color: yellow;
+    color: black; /* Text color for better contrast */
+    border: 2px solid yellow;
+    padding: 10px; /* Padding to make it look like a button */
+    text-align: center; /* Center-align text */
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+  
+  .status-paid {
+    background-color: green;
+    color: white; /* Text color for better contrast */
+    border: 2px solid green;
+    padding: 10px; /* Padding to make it look like a button */
+    text-align: center; /* Center-align text */
+    cursor: pointer; 
+    border-radius: 4px;/* Pointer cursor on hover */
+  }
+  
+  .status-overdue {
+    background-color: red;
+    color: white; /* Text color for better contrast */
+    border: 2px solid red;
+    padding: 10px; /* Padding to make it look like a button */
+    text-align: center; /* Center-align text */
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+  

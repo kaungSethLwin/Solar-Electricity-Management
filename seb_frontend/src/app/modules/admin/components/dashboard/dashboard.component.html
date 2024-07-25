@@ -1,0 +1,194 @@
+<div class="container mt-4">
+  <header class="d-flex flex-column align-items-center mb-4">
+    <h1 class="mb-4">Dashboard</h1>
+    <nav>
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <button pButton type="button" (click)="showHouses()" label="Houses" class="nav-link custom-button"></button>
+        </li>
+        <li class="nav-item">
+          <button pButton type="button" (click)="showBills()" label="Bills" class="nav-link custom-button"></button>
+        </li>
+        <li class="nav-item">
+          <button pButton type="button" (click)="showUsers()" label="Users" class="nav-link custom-button"></button>
+        </li>
+        <li class="nav-item">
+          <button pButton type="button" (click)="logout()" label="Logout" class="nav-link custom-button"></button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- Houses Section -->
+  <div *ngIf="displayHouses" class="mb-4">
+    <h2>Houses</h2>
+
+    <!-- Search Bar with p-inputIcon -->
+    <p-table #dt2 [value]="houses" [paginator]="true" [rows]="10" [globalFilterFields]="['housename', 'meterNumber', 'address', 'owner']">
+      <ng-template pTemplate="caption">
+        <div class="flex">
+          <div class="p-input-icon-left ml-auto">
+            <input 
+              pInputText 
+              type="text" 
+              (input)="onGlobalFilter($event.target.value)" 
+              placeholder="Search keyword" />
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="houseId" class="table-cell-padding">House ID</th>
+          <th class="table-cell-padding">House Name</th>
+          <th class="table-cell-padding">Meter Number</th>
+          <th class="table-cell-padding">Full Address</th>
+          <th pSortableColumn="city" class="table-cell-padding">City</th>
+          <th pSortableColumn="state" class="table-cell-padding">State/Region</th>
+          <th class="table-cell-padding">Owner Name</th>
+          <th class="table-cell-padding">Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-house>
+        <tr>
+          <td class="table-cell-padding">{{ house.houseId }}</td>
+          <td class="table-cell-padding">{{ house.housename }}</td>
+          <td class="table-cell-padding">{{ house.meterNumber }}</td>
+          <td class="table-cell-padding">{{ house.address }}</td>
+          <td class="table-cell-padding">{{ house.city }}</td>
+          <td class="table-cell-padding">{{ house.state }}</td>
+          <td class="table-cell-padding">{{ house.owner }}</td>
+          <td class="table-cell-padding">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="createOrUpdateHouse(house)"
+              class="p-button-info mr-2 mb-2"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              (click)="deleteHouse(house.id)"
+              class="p-button-danger mb-2"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <button 
+      pButton 
+      type="button" 
+      (click)="createOrUpdateHouse(null)" 
+      class="register-button mt-3 mb-2">
+      <i class="fa fa-plus"></i> Register House
+    </button>
+  </div>
+
+  <!-- Bills Section -->
+  <div *ngIf="displayBills" class="mb-4">
+    <h2>Bills</h2>
+    <p-table
+      #dt2
+      [value]="bills"
+      [paginator]="true"
+      [rows]="10"
+      [globalFilterFields]="['housename', 'meterNumber', 'billDate', 'meterNumber']"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="table-cell-padding">Bill ID</th>
+          <th class="table-cell-padding">Used Unit</th>
+          <th class="table-cell-padding">Total</th>
+          <th pSortableColumn="billStatus" class="table-cell-padding">Status</th>
+          <th pSortableColumn="billDate" class="table-cell-padding">Create Date</th>
+          <th class="table-cell-padding">House Name</th>
+          <th class="table-cell-padding">Owner</th>
+          <th pSortableColumn="dueDate" class="table-cell-padding">DueDate</th>
+          <th pSortableColumn="paidDate" class="table-cell-padding">PaidDate</th>
+          <th class="table-cell-padding">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-bill>
+        <tr>
+          <td class="table-cell-padding">{{ bill.billId }}</td>
+          <td class="table-cell-padding">{{ bill.usedUnit }}</td>
+          <td class="table-cell-padding">{{ bill.totalAmount }}</td>
+          <td class="table-cell-padding"
+             [ngClass]="{
+                   'status-unpaid': bill.billStatus === 'UNPAID',
+                   'status-paid': bill.billStatus === 'PAID',
+                   'status-overdue': bill.billStatus === 'OVERDUE'
+                  }">
+              {{ bill.billStatus }}
+          </td>
+
+          <td class="table-cell-padding">{{ bill.billDate | date: 'dd/MM/yyyy' }}</td>
+          <td class="table-cell-padding">{{ bill.housename }}</td>
+          <td class="table-cell-padding">{{ bill.owner }}</td>
+          <td class="table-cell-padding">{{ bill.dueDate | date: 'dd/MM/yyyy' }}</td>
+          <td class="table-cell-padding">{{ bill.paidDate ? (bill.paidDate | date: 'dd/MM/yyyy') : 'Not Paid' }}</td>
+          <td class="table-cell-padding">
+            <button pButton type="button" icon="pi pi-pencil" (click)="createOrUpdateBill(bill)" class="p-button-info mr-2 mb-2"></button>
+            <button pButton type="button" icon="pi pi-trash" (click)="deleteBill(bill.id)" class="p-button-danger mb-2"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <button 
+      pButton 
+      type="button" 
+      (click)="createOrUpdateBill(null)" 
+      class="register-button mt-3 mb-2">
+      <i class="fa fa-plus"></i> New Bill
+    </button>
+  </div>
+
+  <!-- Users Section -->
+  <div *ngIf="displayUsers" class="mb-4">
+    <h2>Users</h2>
+    <p-table
+      #dt2
+      [value]="users"
+      [paginator]="true"
+      [rows]="10"
+      [globalFilterFields]="['userName', 'email', 'phoneNumber', 'userRole']"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="table-cell-padding">User ID</th>
+          <th class="table-cell-padding">User Name</th>
+          <th class="table-cell-padding">Email</th>
+          <th class="table-cell-padding">Phone Number</th>
+          <th pSortableColumn="userRole" class="table-cell-padding">Role</th>
+          <th pSortableColumn="createDate" class="table-cell-padding">Create Date</th>
+          <th class="table-cell-padding">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td class="table-cell-padding">{{ user.userId }}</td>
+          <td class="table-cell-padding">{{ user.userName }}</td>
+          <td class="table-cell-padding">{{ user.email }}</td>
+          <td class="table-cell-padding">{{ user.phoneNumber }}</td>
+          <td class="table-cell-padding">{{ user.userRole }}</td>
+          <td class="table-cell-padding">{{ user.createDate | date: 'dd/MM/yyyy' }}</td>
+          <td class="table-cell-padding">
+            <button pButton type="button" icon="pi pi-pencil" (click)="createOrUpdateUser(user)" class="p-button-info mr-2 mb-2"></button>
+            <button pButton type="button" icon="pi pi-trash" (click)="deleteUser(user.userId)" class="p-button-danger mb-2"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <button 
+      pButton 
+      type="button" 
+      (click)="createOrUpdateUser(null)" 
+      class="register-button mt-3 mb-2">
+      <i class="fa fa-plus"></i> Register User
+    </button>
+  </div>
+</div>

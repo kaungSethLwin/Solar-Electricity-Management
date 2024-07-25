@@ -1,0 +1,17 @@
+<div class="ui container">
+    <div class="ui segment login-box">
+      <h2 class="ui header">Please Login</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="ui form">
+        <div class="field">
+          <label for="email">Email:</label>
+          <input type="text" id="email" formControlName="email" placeholder="Enter your username">
+        </div>
+        <div class="field">
+          <label for="password">Password:</label>
+          <input type="password" id="password" formControlName="password" placeholder="Enter your password">
+        </div>
+        <button class="ui primary button" type="submit">Sign In</button>
+      </form>
+    </div>
+  </div>
+  
