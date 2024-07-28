@@ -53,7 +53,6 @@ public class WebSecurityConfig {
             .requestMatchers("/api/admin/**").permitAll()  // Explicitly permit access to /error
             .requestMatchers("/api/employee/**").hasAuthority(UserRole.EMPLOYEE.name())
             .requestMatchers("/api/customer/**").hasAuthority(UserRole.CUSTOMER.name())
-            .requestMatchers("/api/reports/**").hasAnyAuthority(UserRole.ADMIN.name(), UserRole.EMPLOYEE.name())
             .anyRequest().authenticated())
         .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);    

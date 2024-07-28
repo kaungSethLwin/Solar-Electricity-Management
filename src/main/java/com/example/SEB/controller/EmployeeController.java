@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.SEB.dto.BillDto;
 import com.example.SEB.dto.HouseDto;
+import com.example.SEB.dto.ReportDto;
 import com.example.SEB.enums.Status;
 import com.example.SEB.service.BillService;
 import com.example.SEB.service.HouseService;
+import com.example.SEB.service.ReportService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +34,7 @@ public class EmployeeController {
 
  private final HouseService houseService;
 private final BillService billService;
+ private final ReportService reportService;
 
 
     // Create or update a house
@@ -176,4 +179,9 @@ private final BillService billService;
 
     
     
+    @GetMapping("/reports/dashboard")
+    public ResponseEntity<List<ReportDto>> getDashboardReport() {
+        List<ReportDto> reportData = reportService.getReportData();
+        return new ResponseEntity<>(reportData, HttpStatus.OK);
+    }
 }

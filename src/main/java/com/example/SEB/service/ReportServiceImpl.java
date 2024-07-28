@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ReporrtServiceImpl implements ReportService {
+public class ReportServiceImpl implements ReportService {
 
     private final BillRepository billRepository;
 
@@ -38,6 +38,7 @@ public class ReporrtServiceImpl implements ReportService {
             dto.setBillStatus(bill.getBillStatus().name());
             dto.setCreateDate(bill.getBillDate());
             dto.setPaidDate(bill.getPaidDate());
+            dto.setDueDate(bill.getDueDate());
 
             reportData.add(dto);
         }

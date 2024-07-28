@@ -31,11 +31,13 @@
   header {
     background-color: #23171b; /* Light background for header */
     padding: 20px; /* Padding for the header */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for modern look */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for modern look */
   }
   
   h1 {
-    color: #a3b9cf; /* Dark color for the heading */
+    color: #18e9e9; 
+    box-shadow: 0 4px 8px rgba(194, 171, 188, 0.2);/* Dark color for the heading */
   }
   
 
@@ -94,3 +96,38 @@
     cursor: pointer; /* Pointer cursor on hover */
   }
   
+
+  .bills-icon {
+    color: #28a745; /* Choose a beautiful color */
+    margin-right: 8px; /* Add some space between the icon and the text */
+  }
+
+
+  .user-icon {
+    color: #eb7820; /* Choose a beautiful color */
+    margin-right: 8px; /* Add some space between the icon and the text */
+  }
+
+  .house-icon {
+    color: #007bff; /* Choose a beautiful color */
+    margin-right: 8px; /* Add some space between the icon and the text */
+  }
+
+  .report-icon {
+    color: #d80c79; /* Choose a beautiful color */
+    margin-right: 8px; /* Add some space between the icon and the text */
+  }
+
+  .logout-icon{
+    color: #019fb4; /* Choose a beautiful color */
+    margin-right: 8px;
+  }
+
+  .welcome-message {
+    font-size: 1.25rem; /* Larger font size */
+    color: #a4b80a; /* Dark text color */
+    margin-bottom: 1rem; /* Space below the message */
+    text-align: center; /* Center align the text */
+  }
+  
+

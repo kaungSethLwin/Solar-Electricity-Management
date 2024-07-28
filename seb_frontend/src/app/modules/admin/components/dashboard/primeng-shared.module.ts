@@ -5,6 +5,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrderListModule } from 'primeng/orderlist';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog'; // Import DialogModule
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import { OrderListModule } from 'primeng/orderlist';
     InputTextModule,
     FormsModule,
     ReactiveFormsModule,
-    OrderListModule
+    OrderListModule,
+    ConfirmDialogModule,
+    DialogModule,
   ],
   exports: [
     TableModule,

@@ -6,45 +6,62 @@ import { PrimeNGSharedModule } from './primeng-shared.module';
 import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';
 import { Table } from 'primeng/table';
+import { MatDialog } from '@angular/material/dialog';
+import { ComfirmDialogComponent } from '../../../comfirm-dialog/comfirm-dialog.component';
+import { UserRole } from './user-role';
+import { DialogModule } from 'primeng/dialog';
+import { SignUpRequest } from './SignUpRequest';
+
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule,PrimeNGSharedModule,FormsModule],
+  imports: [CommonModule,PrimeNGSharedModule,FormsModule,DialogModule],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+
+  UserRole = UserRole; 
 
   houses: any[] = [];
   house: any;
   bills: any[] = [];
   bill: any;
   users: any[] = [];
+  reports: any[] = [];
+  report: any;
   user: any;
   username: string | undefined;
+  selectedUser : any ={};
 
   displayHouses: boolean = true;
   displayBills: boolean = false;
   displayUsers: boolean = false;
+  displayReport: boolean= false;
+  displayUserForm: boolean = false;
+  
+  isUserEditMode: boolean = false;
   searchOwner: any;
   searchStatus: any;
   searchUsername: any;
+  errorMessage: string | null = null;
 
-  value:any;
 
   @ViewChild('dt2') dt2: Table | undefined;
 
 
+
   
-  constructor(private adminService: AdminService, private router: Router) { }
+  constructor(private adminService: AdminService, private router: Router,private dialog: MatDialog) { }
 
   ngOnInit(): void {
     // Initialize data on component load
     this.getAllHouses();
     this.getAllBills();
     this.getAllUsers();
+    this.getAllReport();
     this.username = this.showUserName(); 
     
   }
@@ -53,7 +70,15 @@ export class DashboardComponent implements OnInit {
     return StorageService.getUsername(); 
   }
 
-  onGlobalFilter(value: string) {
+  showDialog(): void {
+    this.selectedUser = {};
+    this.displayUserForm = true;
+    this.isUserEditMode = true;
+  }
+
+  onGlobalFilter(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const value = inputElement.value;
     if (this.dt2) {
       this.dt2.filterGlobal(value, 'contains');
     }
@@ -98,65 +123,35 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteHouse(houseId: number): void {
-    this.adminService.deleteHouse(houseId).subscribe(
-      () => {
-        console.log('House deleted');
-        this.getAllHouses();
-      },
-      (error) => {
-        console.error('Error deleting house:', error);
-      }
-    );
-  }
+    console.log('Deleting house with ID:', houseId); // Log to verify the value
+    if (houseId === undefined || houseId === null) {
+        console.error('House ID is invalid:', houseId);
+        return;
+    }
 
+    const dialogRef = this.dialog.open(ComfirmDialogComponent, {
+        data: { message: 'Are you sure you want to delete this house?' }
+    });
 
-  findHouseByMeterNumber(meterNumber: string): void {
-    this.adminService.findHouseByMeterNumber(meterNumber).subscribe(
-      (response) => {
-        this.house = response;
-        console.log('House by meter number:', this.house);
-      },
-      (error) => {
-        console.error('Error finding house by meter number:', error);
-      }
-    );
-  }
+    dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+            this.adminService.deleteHouse(houseId).subscribe(
+                () => {
+                    console.log('House deleted');
+                    this.getAllHouses();
+                },
+                (error) => {
+                    console.error('Error deleting house:', error);
+                }
+            );
+        } else {
+            console.log('House deletion canceled');
+        }
+    });
+}
 
-  findHousesByCity(city: string): void {
-    this.adminService.findHousesByCity(city).subscribe(
-      (response) => {
-        this.houses = response;
-        console.log('Houses by city:', this.houses);
-      },
-      (error) => {
-        console.error('Error finding houses by city:', error);
-      }
-    );
-  }
+  
 
-  findHousesByState(state: string): void {
-    this.adminService.findHousesByState(state).subscribe(
-      (response) => {
-        this.houses = response;
-        console.log('Houses by state:', this.houses);
-      },
-      (error) => {
-        console.error('Error finding houses by state:', error);
-      }
-    );
-  }
-
-  findHousesByUserId(userId: number): void {
-    this.adminService.findHousesByUserId(userId).subscribe(
-      (response) => {
-        this.houses = response;
-        console.log('Houses by user ID:', this.houses);
-      },
-      (error) => {
-        console.error('Error finding houses by user ID:', error);
-      }
-    );
-  }
 
   // Bill endpoints
   createOrUpdateBill(bill: any): void {
@@ -196,89 +191,35 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteBill(billId: number): void {
-    this.adminService.deleteBill(billId).subscribe(
-      () => {
-        console.log('Bill deleted');
-        this.getAllBills();
-      },
-      (error) => {
-        console.error('Error deleting bill:', error);
-      }
-    );
-  }
 
-  findBillsByStatus(status: string): void {
-    this.adminService.findBillsByStatus(status).subscribe(
-      (response) => {
-        this.bills = response;
-        console.log('Bills by status:', this.bills);
-      },
-      (error) => {
-        console.error('Error finding bills by status:', error);
-      }
-    );
-  }
+    const dialogRef = this.dialog.open(ComfirmDialogComponent, {
+      data: { message: 'Are you sure you want to delete this Bills?' }
+    });
 
-  findBillsByHouseId(houseId: number): void {
-    this.adminService.findBillsByHouseId(houseId).subscribe(
-      (response) => {
-        this.bills = response;
-        console.log('Bills by house ID:', this.bills);
-      },
-      (error) => {
-        console.error('Error finding bills by house ID:', error);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.adminService.deleteBill(billId).subscribe(
+          () => {
+            console.log('Bill deleted');
+            this.getAllBills();
+          },
+          (error) => {
+            console.error('Error deleting bill:', error);
+          }
+        );
+      } else {
+        console.log('House deletion bill');
       }
-    );
-  }
+    });
+      }
 
-  findBillsByDateRange(startDate: string, endDate: string): void {
-    this.adminService.findBillsByDateRange(startDate, endDate).subscribe(
-      (response) => {
-        this.bills = response;
-        console.log('Bills by date range:', this.bills);
-      },
-      (error) => {
-        console.error('Error finding bills by date range:', error);
-      }
-    );
-  }
 
-  findBillsByDueDate(dueDate: string): void {
-    this.adminService.findBillsByDueDate(dueDate).subscribe(
-      (response) => {
-        this.bills = response;
-        console.log('Bills by due date:', this.bills);
-      },
-      (error) => {
-        console.error('Error finding bills by due date:', error);
-      }
-    );
-  }
 
-  findBillsByPaidDate(paidDate: string): void {
-    this.adminService.findBillsByPaidDate(paidDate).subscribe(
-      (response) => {
-        this.bills = response;
-        console.log('Bills by paid date:', this.bills);
-      },
-      (error) => {
-        console.error('Error finding bills by paid date:', error);
+      updateUser(user: any): void {
+        this.selectedUser = { ...user }; // Copy the user data to selectedUser
+        this.isUserEditMode = true;
+        this.displayUserForm = true;
       }
-    );
-  }
-
-  // User endpoints
-  createOrUpdateUser(user: any): void {
-    this.adminService.createOrUpdateUser(user).subscribe(
-      (response) => {
-        console.log('User created/updated:', response);
-        this.getAllUsers();
-      },
-      (error) => {
-        console.error('Error creating/updating user:', error);
-      }
-    );
-  }
 
   getUserById(userId: number): void {
     this.adminService.getUserById(userId).subscribe(
@@ -304,29 +245,70 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  
   deleteUser(userId: number): void {
-    this.adminService.deleteUser(userId).subscribe(
-      () => {
-        console.log('User deleted');
-        this.getAllUsers();
+    const dialogRef = this.dialog.open(ComfirmDialogComponent, {
+      data: { message: 'Are you sure you want to delete this user? If customer is deleted the house will be also deleted' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.adminService.deleteUser(userId).subscribe(
+          () => {
+            console.log('user deleted');
+            this.getAllBills();
+          },
+          (error) => {
+            console.error('Error deleting user:', error);
+          }
+        );
+      } else {
+        console.log('Bill deletion canceled');
+      }
+    });
+      }
+
+      onSubmitUser(form: any): void {
+        if (this.isUserEditMode) {
+          this.adminService.updateUser(this.selectedUser).subscribe(
+            (response) => {
+              console.log('User updated:', response);
+              this.getAllUsers();
+              this.displayUserForm = false;
+            },
+            (error) => {
+              console.error('Error updating user:', error);
+              this.errorMessage = error.error.message;
+            }
+          );
+        } else {
+          this.adminService.createUser(this.selectedUser).subscribe(
+            (response) => {
+              console.log('User created:', response);
+              this.getAllUsers();
+              this.displayUserForm = false;
+            },
+            (error) => {
+              console.error('Error creating user:', error);
+              this.errorMessage = error.error.message;
+            }
+          );
+        }
+      }
+
+  //Reports
+  getAllReport():void{
+    this.adminService.getAllreports().subscribe(
+      (response) =>{
+        this.reports =response;
+        console.log("Reports: ", this.reports );
       },
       (error) => {
-        console.error('Error deleting user:', error);
+        console.error('Error fetching all Reports: ', error);
       }
-    );
+    )
   }
 
-  findUserByUsername(username: string): void {
-    this.adminService.findUserByUsername(username).subscribe(
-      (response) => {
-        this.user = response;
-        console.log('User by username:', this.user);
-      },
-      (error) => {
-        console.error('Error finding user by username:', error);
-      }
-    );
-  }
 
   logout(){
     StorageService.logout();
@@ -337,17 +319,26 @@ export class DashboardComponent implements OnInit {
     this.displayHouses = true;
     this.displayBills = false;
     this.displayUsers = false;
+    this.displayReport = false;
   }
 
   showBills(): void {
     this.displayHouses = false;
     this.displayBills = true;
     this.displayUsers = false;
+    this.displayReport = false;
   }
 
   showUsers(): void {
     this.displayHouses = false;
     this.displayBills = false;
     this.displayUsers = true;
-  }
+    this.displayReport = false;
+  }  
+  showReports(): void {
+    this.displayHouses = false;
+    this.displayBills = false;
+    this.displayUsers = false;
+    this.displayReport = true;
+  }  
 }

@@ -1,0 +1,25 @@
+/* Ensure proper styling for title and dialog content */
+.modal-title {
+    text-align: center;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+  
+  /* Center the buttons in the footer */
+  .modal-footer {
+    justify-content: center;
+  }
+  
+  .btn {
+    margin: 0 5px;
+  }
+
+  p{
+    color: red;
+  }
+
+  h1{
+    color: black;
+  }

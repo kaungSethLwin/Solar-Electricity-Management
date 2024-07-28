@@ -4,7 +4,7 @@ import {
   PrimeTemplate,
   SharedModule,
   UniqueComponentId
-} from "./chunk-Z2WZUCZO.js";
+} from "./chunk-LQPFRQ5Q.js";
 import {
   DOCUMENT,
   NgClass,
@@ -12,7 +12,7 @@ import {
   NgStyle,
   NgTemplateOutlet,
   isPlatformBrowser
-} from "./chunk-SPQ6GSH7.js";
+} from "./chunk-3CGXVUBG.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -65,7 +65,7 @@ import {
   ɵɵtemplate,
   ɵɵtext,
   ɵɵtextInterpolate
-} from "./chunk-VZ4QXSD6.js";
+} from "./chunk-JTRJNW5M.js";
 
 // node_modules/primeng/fesm2022/primeng-dom.mjs
 var DomHandler = class _DomHandler {
@@ -1808,6 +1808,13 @@ var Button = class _Button {
       "p-badge-no-gutter": this.badge && String(this.badge).length === 1
     };
   }
+  /**
+   * Applies focus.
+   * @group Method
+   */
+  focus() {
+    this.el.nativeElement.firstChild.focus();
+  }
   static ɵfac = function Button_Factory(t) {
     return new (t || _Button)(ɵɵdirectiveInject(ElementRef));
   };
@@ -2088,14 +2095,14 @@ var ButtonModule = class _ButtonModule {
 export {
   DomHandler,
   ConnectedOverlayScrollHandler,
-  AutoFocus,
-  AutoFocusModule,
   BaseIcon,
-  SpinnerIcon,
   Ripple,
   RippleModule,
+  AutoFocus,
+  AutoFocusModule,
+  SpinnerIcon,
   ButtonDirective,
   Button,
   ButtonModule
 };
-//# sourceMappingURL=chunk-DZNR4UZQ.js.map
+//# sourceMappingURL=chunk-JSQWLFMQ.js.map

@@ -1,19 +1,23 @@
 <div class="container mt-4">
   <header class="d-flex flex-column align-items-center mb-4">
     <h1 class="mb-4">Dashboard</h1>
+    <p class="welcome-message">Welcome, {{ username }}!</p>
     <nav>
       <ul class="nav nav-pills">
         <li class="nav-item">
-          <button pButton type="button" (click)="showHouses()" label="Houses" class="nav-link custom-button"></button>
+          <button pButton type="button" (click)="showHouses()" label="Houses" class="nav-link custom-button"><i class="fas fa-home house-icon"></i></button>
         </li>
         <li class="nav-item">
-          <button pButton type="button" (click)="showBills()" label="Bills" class="nav-link custom-button"></button>
+          <button pButton type="button" (click)="showBills()" label="Bills" class="nav-link custom-button"> <i class="fas fa-file-invoice-dollar bills-icon"></i> </button>
         </li>
         <li class="nav-item">
-          <button pButton type="button" (click)="showUsers()" label="Users" class="nav-link custom-button"></button>
+          <button pButton type="button" (click)="showUsers()" label="Users" class="nav-link custom-button"> <i class="fas fa-users user-icon"></i> </button>
         </li>
         <li class="nav-item">
-          <button pButton type="button" (click)="logout()" label="Logout" class="nav-link custom-button"></button>
+          <button pButton type="button" (click)="showReports()" label="Reports" class="nav-link custom-button"> <i class="fas fa-file-alt report-icon"></i> </button>
+        </li>
+        <li class="nav-item">
+          <button pButton type="button" (click)="logout()" label="Logout" class="nav-link custom-button">  <i class="fa fa-sign-out-alt logout-icon"z></i>  </button>
         </li>
       </ul>
     </nav>
@@ -21,22 +25,16 @@
   
   <!-- Houses Section -->
   <div *ngIf="displayHouses" class="mb-4">
-    <h2>Houses</h2>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h2 class="m-0">   <i class="fas fa-home house-icon"></i> House Section</h2>
+      <div class="p-input-icon-left">
+        <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search keyword" />
+      </div>
+    </div>
+
 
     <!-- Search Bar with p-inputIcon -->
     <p-table #dt2 [value]="houses" [paginator]="true" [rows]="10" [globalFilterFields]="['housename', 'meterNumber', 'address', 'owner']">
-      <ng-template pTemplate="caption">
-        <div class="flex">
-          <div class="p-input-icon-left ml-auto">
-            <input 
-              pInputText 
-              type="text" 
-              (input)="onGlobalFilter($event.target.value)" 
-              placeholder="Search keyword" />
-          </div>
-        </div>
-      </ng-template>
-
       <ng-template pTemplate="header">
         <tr>
           <th pSortableColumn="houseId" class="table-cell-padding">House ID</th>
@@ -71,7 +69,7 @@
               pButton
               type="button"
               icon="pi pi-trash"
-              (click)="deleteHouse(house.id)"
+              (click)="deleteHouse(house.houseId)"
               class="p-button-danger mb-2"
             ></button>
           </td>
@@ -90,13 +88,18 @@
 
   <!-- Bills Section -->
   <div *ngIf="displayBills" class="mb-4">
-    <h2>Bills</h2>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h2 class="m-0"> <i class="fas fa-file-invoice-dollar bills-icon "></i>Bills Section</h2>
+      <div class="p-input-icon-left">
+        <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search keyword" />
+      </div>
+    </div>
     <p-table
       #dt2
       [value]="bills"
       [paginator]="true"
       [rows]="10"
-      [globalFilterFields]="['housename', 'meterNumber', 'billDate', 'meterNumber']"
+      [globalFilterFields]="['housename', 'meterNumber', 'billDate', 'meterNumber','billStatus','owner']"
     >
       <ng-template pTemplate="header">
         <tr>
@@ -115,7 +118,7 @@
       <ng-template pTemplate="body" let-bill>
         <tr>
           <td class="table-cell-padding">{{ bill.billId }}</td>
-          <td class="table-cell-padding">{{ bill.usedUnit }}</td>
+          <td class="table-cell-padding">{{ bill.usedUnit }} Watt</td>
           <td class="table-cell-padding">{{ bill.totalAmount }}</td>
           <td class="table-cell-padding"
              [ngClass]="{
@@ -133,7 +136,7 @@
           <td class="table-cell-padding">{{ bill.paidDate ? (bill.paidDate | date: 'dd/MM/yyyy') : 'Not Paid' }}</td>
           <td class="table-cell-padding">
             <button pButton type="button" icon="pi pi-pencil" (click)="createOrUpdateBill(bill)" class="p-button-info mr-2 mb-2"></button>
-            <button pButton type="button" icon="pi pi-trash" (click)="deleteBill(bill.id)" class="p-button-danger mb-2"></button>
+            <button pButton type="button" icon="pi pi-trash" (click)="deleteBill(bill.billId)" class="p-button-danger mb-2"></button>
           </td>
         </tr>
       </ng-template>
@@ -149,14 +152,20 @@
 
   <!-- Users Section -->
   <div *ngIf="displayUsers" class="mb-4">
-    <h2>Users</h2>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h2 class="m-0"><i class="fas fa-users user-icon"></i>User Section</h2>
+      <div class="p-input-icon-left">
+        <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search keyword" />
+      </div>
+    </div>
     <p-table
       #dt2
       [value]="users"
       [paginator]="true"
       [rows]="10"
-      [globalFilterFields]="['userName', 'email', 'phoneNumber', 'userRole']"
+      [globalFilterFields]="['username', 'email', 'phoneNumber', 'userRole']"
     >
+   
       <ng-template pTemplate="header">
         <tr>
           <th class="table-cell-padding">User ID</th>
@@ -171,13 +180,13 @@
       <ng-template pTemplate="body" let-user>
         <tr>
           <td class="table-cell-padding">{{ user.userId }}</td>
-          <td class="table-cell-padding">{{ user.userName }}</td>
+          <td class="table-cell-padding">{{ user.username }}</td>
           <td class="table-cell-padding">{{ user.email }}</td>
           <td class="table-cell-padding">{{ user.phoneNumber }}</td>
-          <td class="table-cell-padding">{{ user.userRole }}</td>
+          <td class="table-cell-padding">{{ user.role }}</td>
           <td class="table-cell-padding">{{ user.createDate | date: 'dd/MM/yyyy' }}</td>
           <td class="table-cell-padding">
-            <button pButton type="button" icon="pi pi-pencil" (click)="createOrUpdateUser(user)" class="p-button-info mr-2 mb-2"></button>
+            <button pButton type="button" icon="pi pi-pencil" (click)="updateUser(user)" class="p-button-info mr-2 mb-2"></button>
             <button pButton type="button" icon="pi pi-trash" (click)="deleteUser(user.userId)" class="p-button-danger mb-2"></button>
           </td>
         </tr>
@@ -186,9 +195,98 @@
     <button 
       pButton 
       type="button" 
-      (click)="createOrUpdateUser(null)" 
+      (click)="showDialog()" 
       class="register-button mt-3 mb-2">
       <i class="fa fa-plus"></i> Register User
     </button>
   </div>
+
+  <!-- Report Section -->
+  <div *ngIf="displayReport" class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h2 class="m-0"><i class="fas fa-file-alt report-icon"></i> Reprot Section</h2>
+      <div class="p-input-icon-left">
+        <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search keyword" />
+      </div>
+    </div>
+    <p-table
+      #dt2
+      [value]="reports"
+      [paginator]="true"
+      [rows]="10"
+      [globalFilterFields]="['houseId', 'billId', 'username', 'usedUnit']"
+    >
+   
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="table-cell-padding">House ID</th>
+          <th class="table-cell-padding">Bill Id</th>
+          <th class="table-cell-padding">User Name</th>
+          <th class="table-cell-padding">Used Unit</th>
+          <th pSortableColumn="userRole" class="table-cell-padding">Total</th>
+          <th pSortableColumn="createDate" class="table-cell-padding">Bill Status</th>
+          <th pSortableColumn="userRole" class="table-cell-padding">Create Date</th>
+          <th pSortableColumn="userRole" class="table-cell-padding">Paid Date</th>
+          <th pSortableColumn="createDate" class="table-cell-padding">Due Date</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-report>
+        <tr>
+          <td class="table-cell-padding">{{ report.houseId }}</td>
+          <td class="table-cell-padding">{{ report.billId }}</td>
+          <td class="table-cell-padding">{{ report.username }}</td>
+          <td class="table-cell-padding">{{ report.usedUnit }} Watt</td>
+          <td class="table-cell-padding">{{ report.total }}</td>
+          <td class="table-cell-padding">{{ report.billStatus }}</td>
+          <td class="table-cell-padding">{{ report.createDate | date: 'dd/MM/yyyy'}}</td>
+          <td class="table-cell-padding">{{ report.paidDate ? (report.paidDate | date: 'dd/MM/yyyy') : 'Not Paid' }}</td>
+          <td class="table-cell-padding">{{ report.dueDate | date: 'dd/MM/yyyy' }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>
+
+
+<p-dialog header="Create/Edit User" [(visible)]="displayUserForm" modal="modal" [responsive]="true" [style]="{'width':'50vw'}" [closable]="true" [dismissableMask]="true">
+  <form #userForm="ngForm" (ngSubmit)="onSubmitUser(userForm)" novalidate>
+    <div class="form-group mb-3">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" class="form-control" ngModel [(ngModel)]="selectedUser.username" required>
+    </div>
+    
+    <div class="form-group mb-3">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" class="form-control" ngModel [(ngModel)]="selectedUser.email" required>
+      <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" class="form-control" ngModel [(ngModel)]="selectedUser.password" required>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="phoneNumber">Phone Number</label>
+      <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" ngModel [(ngModel)]="selectedUser.phoneNumber" required>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="role">Role</label>
+      <select id="role" name="role" class="form-control" ngModel [(ngModel)]="selectedUser.role" required>
+        <option [ngValue]="UserRole.EMPLOYEE">Employee</option>
+        <option [ngValue]="UserRole.CUSTOMER">Customer</option>
+      </select>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="isActive">Active</label>
+      <input type="checkbox" id="isActive" name="isActive" class="form-check-input" ngModel [(ngModel)]="selectedUser.isActive">
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-primary">{{ isUserEditMode ? 'Update' : 'Save' }} User</button>
+    </div>
+  </form>
+</p-dialog>
+

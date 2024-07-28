@@ -13,7 +13,7 @@ body {
     background: rgba(81, 58, 171, 0.9); /* White background with slight transparency */
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 4);
     width: 100%;
     max-width: 600px; /* Adjust based on your design requirements */
     text-align: center;

@@ -1,12 +1,12 @@
 import {
-  NgModel
-} from "./chunk-MCDLZYKH.js";
-import {
   PrimeNGConfig
-} from "./chunk-Z2WZUCZO.js";
+} from "./chunk-LQPFRQ5Q.js";
+import {
+  NgModel
+} from "./chunk-6IUPN7T6.js";
 import {
   CommonModule
-} from "./chunk-SPQ6GSH7.js";
+} from "./chunk-3CGXVUBG.js";
 import {
   ChangeDetectorRef,
   Directive,
@@ -22,7 +22,7 @@ import {
   ɵɵdefineNgModule,
   ɵɵdirectiveInject,
   ɵɵlistener
-} from "./chunk-VZ4QXSD6.js";
+} from "./chunk-JTRJNW5M.js";
 
 // node_modules/primeng/fesm2022/primeng-inputtext.mjs
 var InputText = class _InputText {
@@ -139,4 +139,4 @@ export {
   InputText,
   InputTextModule
 };
-//# sourceMappingURL=chunk-U32E5ILM.js.map
+//# sourceMappingURL=chunk-SZS5JUC7.js.map

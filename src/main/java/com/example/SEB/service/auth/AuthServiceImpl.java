@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthSerrvice{
        user.setUsername(signUpRequest.getUsername());
        user.setEmail(signUpRequest.getEmail());
        user.setPassword(new BCryptPasswordEncoder().encode(signUpRequest.getPassword()));
-       user.setRole(UserRole.EMPLOYEE);
+       user.setRole(signUpRequest.getRole()); 
        user.setCreateDate(new Date()); 
        user.setActive(true);
        user.setPhoneNumber(signUpRequest.getPhoneNumber());

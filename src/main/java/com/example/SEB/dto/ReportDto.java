@@ -15,5 +15,6 @@ public class ReportDto {
     private String billStatus;
     private Date createDate;
     private Date paidDate;
+    private Date dueDate;
 
 }

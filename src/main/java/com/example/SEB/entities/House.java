@@ -3,7 +3,7 @@ package com.example.SEB.entities;
 import java.util.Date;
 import java.util.List;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -39,11 +39,11 @@ public class House {
 	@Column(name = "STATE",nullable = false)
 	private String state;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID") 
+    @ManyToOne(cascade = CascadeType.REMOVE) // Cascade remove to handle deletion of houses when a user is deleted
+    @JoinColumn(name = "USER_ID")
     private User user;
 
-    @OneToMany(mappedBy = "house", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "house", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bill> bills;
     
     @Column(name = "DATE")
