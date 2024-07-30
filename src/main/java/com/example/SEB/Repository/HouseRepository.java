@@ -26,4 +26,10 @@ public interface HouseRepository extends JpaRepository<House,Integer> {
 
      @Query("SELECT h FROM House h JOIN h.user u WHERE u.username = :ownerName")
     List<House> findByOwnerName(@Param("ownerName") String ownerName);
+    
+    @Query("SELECT h.housename FROM House h")
+    List<String> findAllHouseNames();
+
+
+    
 }

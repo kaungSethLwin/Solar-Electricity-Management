@@ -27,7 +27,7 @@ public class House {
 	private String housename;
 
 
-    @Column(name = "METER_NUMBER",nullable = false)
+    @Column(name = "METER_NUMBER",nullable = false,unique = true)
 	private String meterNumber;
 	
 	@Column(name = "ADDRESS",nullable = false)

@@ -40,24 +40,27 @@ public class WebSecurityConfig {
     private final UserService userService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http
-        .csrf(AbstractHttpConfigurer::disable)
-        .cors(AbstractHttpConfigurer::disable)
-        .formLogin(AbstractHttpConfigurer::disable)
-        .httpBasic(AbstractHttpConfigurer::disable)
-        .logout(LogoutConfigurer::disable)
-        .anonymous(AnonymousConfigurer::disable)
-        .authorizeHttpRequests(request -> request
-            .requestMatchers("/api/auth/**").permitAll()
-            .requestMatchers("/api/admin/**").permitAll()  // Explicitly permit access to /error
-            .requestMatchers("/api/employee/**").hasAuthority(UserRole.EMPLOYEE.name())
-            .requestMatchers("/api/customer/**").hasAuthority(UserRole.CUSTOMER.name())
-            .anyRequest().authenticated())
-        .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);    
-        return http.build();
-        }
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable()) // Disable CSRF protection if not needed
+        .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Configure CORS
+        .formLogin(formLogin -> formLogin.disable()) // Disable form login
+        .httpBasic(httpBasic -> httpBasic.disable()) // Disable HTTP basic authentication
+        .logout(logout -> logout.disable()) // Disable logout support
+        .anonymous(anonymous -> anonymous.disable()) // Disable anonymous access
+        .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers("/api/auth/**").permitAll() // Permit all requests to /api/auth/**
+            .requestMatchers("/api/admin/**").permitAll() // Permit all requests to /api/admin/**
+            .requestMatchers("/api/employee/**").permitAll() // Permit all requests to /api/employee/**
+            .requestMatchers("/api/customer/**").permitAll() // Permit all requests to /api/customer/**
+            .anyRequest().authenticated()) // Require authentication for any other request
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless sessions
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
+    
+    return http.build();
+}
+
+
 
         @Bean
         public PasswordEncoder passwordEncoder(){
@@ -84,10 +87,10 @@ public class WebSecurityConfig {
          return (web) -> web.httpFirewall(firewall);
        }
 
-       @Bean
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Adjust as needed
+    configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); 
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
     configuration.setAllowedHeaders(Arrays.asList("*"));
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

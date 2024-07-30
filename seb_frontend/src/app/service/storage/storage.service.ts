@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-const TOKEN = "token";
+const TOKEN = "jwt";
 const USER  = "user";
 @Injectable({
   providedIn: 'root'
@@ -44,13 +44,11 @@ export class StorageService {
     return user.id;
   }
 
-  static getUsername():string{
+  static getUsername(): string {
     const user = this.getUser();
-    if(user == null){
-      return "";
-    }
-    return user.username;
+    return user ? user.username : "";
   }
+  
 
   static isAdminLoggin():boolean{
     if(this.getToken == null){

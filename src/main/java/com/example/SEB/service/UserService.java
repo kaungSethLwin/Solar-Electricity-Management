@@ -32,4 +32,6 @@ public interface UserService {
 
     User convertToEntity(UserDto userDto); 
 
+    List<UserDto> getAllCustomers();
+
 } 

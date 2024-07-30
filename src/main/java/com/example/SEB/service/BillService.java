@@ -45,4 +45,6 @@ public interface BillService {
 
     // Convert BillDto to Bill entity
     Bill convertToEntity(BillDto billDto);
+
+    List<BillDto> getAllBillsByHouses(List<HouseDto> houseDtos);
 }

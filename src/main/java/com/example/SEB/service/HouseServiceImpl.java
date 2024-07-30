@@ -1,5 +1,6 @@
 package com.example.SEB.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,8 +11,11 @@ import org.springframework.stereotype.Service;
 import com.example.SEB.Repository.HouseRepository;
 import com.example.SEB.Repository.UserRepository;
 import com.example.SEB.dto.HouseDto;
+import com.example.SEB.entities.Bill;
 import com.example.SEB.entities.House;
 import com.example.SEB.entities.User;
+
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -49,10 +53,6 @@ public class HouseServiceImpl implements HouseService{
         }
     }
 
-    @Override
-    public Optional<HouseDto> findHouseByMeterNumber(String meterNumber) {
-        return houseRepository.findByMeterNumber(meterNumber).map(this::convertToDto);
-    }
 
     @Override
     public List<HouseDto> findHousesByCity(String city) {
@@ -77,6 +77,48 @@ public class HouseServiceImpl implements HouseService{
                      .collect(Collectors.toList());
     }
 
+    @Transactional
+    @Override
+    public HouseDto updateHouse(HouseDto houseDto) {
+    // Load the existing house entity from the database
+      House existingHouse = houseRepository.findById(houseDto.getHouseId())
+            .orElseThrow(() -> new RuntimeException("House not found"));
+
+    // Update fields of the existing house
+       existingHouse.setHousename(houseDto.getHousename());
+       existingHouse.setMeterNumber(houseDto.getMeterNumber());
+       existingHouse.setAddress(houseDto.getAddress());
+       existingHouse.setCity(houseDto.getCity());
+       existingHouse.setState(houseDto.getState());
+
+       // Assuming you have a method to find User by username
+       User newUser = userRepository.findByUsername(houseDto.getOwner())
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+       existingHouse.setUser(newUser);
+
+      // Update the house entity with the new user
+      for (Bill bill : existingHouse.getBills()) {
+        bill.setHouse(existingHouse);
+    }
+
+    // Save the updated house entity
+    House updatedHouse = houseRepository.save(existingHouse);
+
+    return convertToDto(updatedHouse);
+   }
+
+    @Override
+     public boolean hasMeterNumber(String number) {
+       return houseRepository.findByMeterNumber(number).isPresent();
+    }
+
+    @Override
+    public List<String> getAllHouseNames() {
+        return houseRepository.findAllHouseNames();
+    }
+
+
     @Override
     public HouseDto convertToDto(House house) {
         HouseDto houseDto = new HouseDto();
@@ -99,6 +141,7 @@ public class HouseServiceImpl implements HouseService{
         house.setAddress(houseDto.getAddress());
         house.setCity(houseDto.getCity());
         house.setState(houseDto.getState());
+        house.setDate(new Date());
         
         // Assuming you have a method to find User by username
         User user = userRepository.findByUsername(houseDto.getOwner()).orElseThrow(() -> new RuntimeException("User not found"));
@@ -107,6 +150,7 @@ public class HouseServiceImpl implements HouseService{
         return house;
     }
 
+    
 
 
     

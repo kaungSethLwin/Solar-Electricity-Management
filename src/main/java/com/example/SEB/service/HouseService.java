@@ -20,9 +20,6 @@ public interface HouseService {
   // Delete a house by its ID
   void deleteHouse(int houseId);
 
-  // Find a house by its meter number
-  Optional<HouseDto> findHouseByMeterNumber(String meterNumber);
-
   // Find all houses by city
   List<HouseDto> findHousesByCity(String city);
 
@@ -40,5 +37,10 @@ public interface HouseService {
 
   List<HouseDto> findByOwnerName(String ownerName);
 
-    
+
+  HouseDto updateHouse(HouseDto houseDto);
+  
+  boolean hasMeterNumber(String number);
+  
+  List<String> getAllHouseNames();
 }

@@ -6,7 +6,8 @@ import {
   sequence,
   style,
   ɵPRE_STYLE
-} from "./chunk-I4J6BTCB.js";
+} from "./chunk-NHUH57PJ.js";
+import "./chunk-SPQ6GSH7.js";
 import {
   Injectable,
   RuntimeError,
@@ -14,7 +15,7 @@ import {
   __spreadValues,
   setClassMetadata,
   ɵɵdefineInjectable
-} from "./chunk-JTRJNW5M.js";
+} from "./chunk-VZ4QXSD6.js";
 
 // node_modules/@angular/animations/fesm2022/browser.mjs
 var LINE_START = "\n - ";
@@ -3985,29 +3986,28 @@ var AnimationRendererFactory = class {
     return this.engine.whenRenderingDone();
   }
 };
-
 export {
-  getParentElement,
-  validateStyleProperty,
-  validateWebAnimatableStyleProperty,
-  containsElement,
-  invokeQuery,
-  NoopAnimationDriver,
   AnimationDriver,
-  AnimationStyleNormalizer,
-  NoopAnimationStyleNormalizer,
-  normalizeKeyframes,
-  camelCaseToDashCase,
-  allowPreviousPlayerStylesMerge,
-  WebAnimationsStyleNormalizer,
-  AnimationEngine,
-  WebAnimationsPlayer,
-  WebAnimationsDriver,
-  createEngine,
-  Animation,
-  BaseAnimationRenderer,
-  AnimationRenderer,
-  AnimationRendererFactory
+  NoopAnimationDriver,
+  Animation as ɵAnimation,
+  AnimationEngine as ɵAnimationEngine,
+  AnimationRenderer as ɵAnimationRenderer,
+  AnimationRendererFactory as ɵAnimationRendererFactory,
+  AnimationStyleNormalizer as ɵAnimationStyleNormalizer,
+  BaseAnimationRenderer as ɵBaseAnimationRenderer,
+  NoopAnimationStyleNormalizer as ɵNoopAnimationStyleNormalizer,
+  WebAnimationsDriver as ɵWebAnimationsDriver,
+  WebAnimationsPlayer as ɵWebAnimationsPlayer,
+  WebAnimationsStyleNormalizer as ɵWebAnimationsStyleNormalizer,
+  allowPreviousPlayerStylesMerge as ɵallowPreviousPlayerStylesMerge,
+  camelCaseToDashCase as ɵcamelCaseToDashCase,
+  containsElement as ɵcontainsElement,
+  createEngine as ɵcreateEngine,
+  getParentElement as ɵgetParentElement,
+  invokeQuery as ɵinvokeQuery,
+  normalizeKeyframes as ɵnormalizeKeyframes,
+  validateStyleProperty as ɵvalidateStyleProperty,
+  validateWebAnimatableStyleProperty as ɵvalidateWebAnimatableStyleProperty
 };
 /*! Bundled license information:
 
@@ -4018,4 +4018,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-RLXXZZIS.js.map
+//# sourceMappingURL=browser-JILUTR2U.js.map

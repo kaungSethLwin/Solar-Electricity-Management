@@ -47,7 +47,7 @@ public class AuthController {
     
 
 
-@PostMapping("/login")
+    @PostMapping("/login")
     public AuthenticationResponse login(@RequestBody AuthenticationRequest authenticationRequest){
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
@@ -58,6 +58,8 @@ public class AuthController {
         UserDetails userDetails = userService.userDetailsService().loadUserByUsername(authenticationRequest.getEmail());
         Optional<User> optionalUser = userRepository.findFirstByEmail(authenticationRequest.getEmail());
         final String jwtToken = jwtUtils.generateToken(userDetails);
+        System.out.println("User Name: " + userDetails.getUsername());
+        System.out.println("User Email: " + optionalUser.get().getEmail());
         AuthenticationResponse authResponse = new AuthenticationResponse();
        if(optionalUser.isPresent()){
         authResponse.setUsername(optionalUser.get().getUsername());

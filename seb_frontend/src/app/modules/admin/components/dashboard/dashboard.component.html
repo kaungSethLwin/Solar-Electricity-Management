@@ -1,7 +1,7 @@
 <div class="container mt-4">
   <header class="d-flex flex-column align-items-center mb-4">
     <h1 class="mb-4">Dashboard</h1>
-    <p class="welcome-message">Welcome, {{ username }}!</p>
+    <p class="welcome-message">Welcome, {{ showusername }}!</p>
     <nav>
       <ul class="nav nav-pills">
         <li class="nav-item">
@@ -58,20 +58,8 @@
           <td class="table-cell-padding">{{ house.state }}</td>
           <td class="table-cell-padding">{{ house.owner }}</td>
           <td class="table-cell-padding">
-            <button
-              pButton
-              type="button"
-              icon="pi pi-pencil"
-              (click)="createOrUpdateHouse(house)"
-              class="p-button-info mr-2 mb-2"
-            ></button>
-            <button
-              pButton
-              type="button"
-              icon="pi pi-trash"
-              (click)="deleteHouse(house.houseId)"
-              class="p-button-danger mb-2"
-            ></button>
+            <button pButton  type="button"  icon="pi pi-pencil"  (click)="updateHouse(house)"  class="p-button-info mr-2 mb-2"></button>
+            <button  pButton type="button"  icon="pi pi-trash" (click)="deleteHouse(house.houseId)" class="p-button-danger mb-2" ></button>
           </td>
         </tr>
       </ng-template>
@@ -80,7 +68,7 @@
     <button 
       pButton 
       type="button" 
-      (click)="createOrUpdateHouse(null)" 
+      (click)="showDialogforHouse()" 
       class="register-button mt-3 mb-2">
       <i class="fa fa-plus"></i> Register House
     </button>
@@ -135,7 +123,7 @@
           <td class="table-cell-padding">{{ bill.dueDate | date: 'dd/MM/yyyy' }}</td>
           <td class="table-cell-padding">{{ bill.paidDate ? (bill.paidDate | date: 'dd/MM/yyyy') : 'Not Paid' }}</td>
           <td class="table-cell-padding">
-            <button pButton type="button" icon="pi pi-pencil" (click)="createOrUpdateBill(bill)" class="p-button-info mr-2 mb-2"></button>
+            <button pButton type="button" icon="pi pi-pencil" (click)="updateBill(bill)" class="p-button-info mr-2 mb-2"></button>
             <button pButton type="button" icon="pi pi-trash" (click)="deleteBill(bill.billId)" class="p-button-danger mb-2"></button>
           </td>
         </tr>
@@ -144,7 +132,7 @@
     <button 
       pButton 
       type="button" 
-      (click)="createOrUpdateBill(null)" 
+      (click)="showDialogforBill()" 
       class="register-button mt-3 mb-2">
       <i class="fa fa-plus"></i> New Bill
     </button>
@@ -172,6 +160,7 @@
           <th class="table-cell-padding">User Name</th>
           <th class="table-cell-padding">Email</th>
           <th class="table-cell-padding">Phone Number</th>
+          <th pSortableColumn="isActive" class="table-cell-padding">isActive</th>
           <th pSortableColumn="userRole" class="table-cell-padding">Role</th>
           <th pSortableColumn="createDate" class="table-cell-padding">Create Date</th>
           <th class="table-cell-padding">Actions</th>
@@ -183,6 +172,7 @@
           <td class="table-cell-padding">{{ user.username }}</td>
           <td class="table-cell-padding">{{ user.email }}</td>
           <td class="table-cell-padding">{{ user.phoneNumber }}</td>
+          <td class="table-cell-padding">{{ user.active }}</td>
           <td class="table-cell-padding">{{ user.role }}</td>
           <td class="table-cell-padding">{{ user.createDate | date: 'dd/MM/yyyy' }}</td>
           <td class="table-cell-padding">
@@ -195,7 +185,7 @@
     <button 
       pButton 
       type="button" 
-      (click)="showDialog()" 
+      (click)="showDialogforUser()" 
       class="register-button mt-3 mb-2">
       <i class="fa fa-plus"></i> Register User
     </button>
@@ -237,7 +227,14 @@
           <td class="table-cell-padding">{{ report.username }}</td>
           <td class="table-cell-padding">{{ report.usedUnit }} Watt</td>
           <td class="table-cell-padding">{{ report.total }}</td>
-          <td class="table-cell-padding">{{ report.billStatus }}</td>
+          <td class="table-cell-padding"
+             [ngClass]="{
+                   'status-unpaid': report.billStatus === 'UNPAID',
+                   'status-paid': report.billStatus === 'PAID',
+                   'status-overdue': report.billStatus === 'OVERDUE'
+                  }">
+              {{ report.billStatus }}
+          </td>
           <td class="table-cell-padding">{{ report.createDate | date: 'dd/MM/yyyy'}}</td>
           <td class="table-cell-padding">{{ report.paidDate ? (report.paidDate | date: 'dd/MM/yyyy') : 'Not Paid' }}</td>
           <td class="table-cell-padding">{{ report.dueDate | date: 'dd/MM/yyyy' }}</td>
@@ -247,46 +244,218 @@
   </div>
 </div>
 
+<!-- 
+Forms -->
 
-<p-dialog header="Create/Edit User" [(visible)]="displayUserForm" modal="modal" [responsive]="true" [style]="{'width':'50vw'}" [closable]="true" [dismissableMask]="true">
+<p-dialog header="Create/Edit User" [(visible)]="displayUserForm" modal="modal" [style]="{'width':'50vw'}" [closable]="true" [dismissableMask]="true">
   <form #userForm="ngForm" (ngSubmit)="onSubmitUser(userForm)" novalidate>
-    <div class="form-group mb-3">
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" class="form-control" ngModel [(ngModel)]="selectedUser.username" required>
-    </div>
     
     <div class="form-group mb-3">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" class="form-control" ngModel [(ngModel)]="selectedUser.email" required>
-      <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" class="form-control"
+             [(ngModel)]="selectedUser.username" #username="ngModel" required>
+      <div *ngIf="username.invalid && (username.dirty || username.touched)" class="text-danger">
+        <div *ngIf="username.errors?.['required']">Username is required.</div>
+      </div>
     </div>
 
     <div class="form-group mb-3">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" class="form-control"
+             [(ngModel)]="selectedUser.email" #email="ngModel" required email>
+             <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
+      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+        <div *ngIf="email.errors?.['required']">Email is required.</div>
+        <div *ngIf="email.errors?.['email']">Invalid email format.</div>
+      </div>
+    </div>
+
+    <!-- Conditionally display password field only when creating a new user -->
+    <div class="form-group mb-3" *ngIf="!isUserEditMode">
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" class="form-control" ngModel [(ngModel)]="selectedUser.password" required>
+      <input type="password" id="password" name="password" class="form-control"
+             [(ngModel)]="selectedUser.password" #password="ngModel" required pattern="^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{9,}$">
+      <div *ngIf="password.invalid && (password.dirty || password.touched)" class="text-danger">
+        <div *ngIf="password.errors?.['required']">Password is required.</div>
+        <div *ngIf="password.errors?.['pattern']">Password must be at least 9 characters long, include letters, numbers, and an uppercase letter.</div>
+      </div>
     </div>
 
     <div class="form-group mb-3">
       <label for="phoneNumber">Phone Number</label>
-      <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" ngModel [(ngModel)]="selectedUser.phoneNumber" required>
+      <input type="text" id="phoneNumber" name="phoneNumber" class="form-control"
+             [(ngModel)]="selectedUser.phoneNumber" #phoneNumber="ngModel" required pattern="^09\d{9}$">
+      <div *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)" class="text-danger">
+        <div *ngIf="phoneNumber.errors?.['required']">Phone number is required.</div>
+        <div *ngIf="phoneNumber.errors?.['pattern']">Phone number must start with 09.</div>
+      </div>
     </div>
 
     <div class="form-group mb-3">
       <label for="role">Role</label>
-      <select id="role" name="role" class="form-control" ngModel [(ngModel)]="selectedUser.role" required>
+      <select id="role" name="role" class="form-control"
+              [(ngModel)]="selectedUser.role" #role="ngModel" required>
         <option [ngValue]="UserRole.EMPLOYEE">Employee</option>
         <option [ngValue]="UserRole.CUSTOMER">Customer</option>
       </select>
+      <div *ngIf="role.invalid && (role.dirty || role.touched)" class="text-danger">
+        Role is required.
+      </div>
     </div>
 
     <div class="form-group mb-3">
-      <label for="isActive">Active</label>
-      <input type="checkbox" id="isActive" name="isActive" class="form-check-input" ngModel [(ngModel)]="selectedUser.isActive">
+      <label for="active">Active</label>
+      <input type="checkbox" id="active" name="active" class="form-check-input"
+             [(ngModel)]="selectedUser.active">
     </div>
 
     <div class="d-flex justify-content-center">
-      <button type="submit" class="btn btn-primary">{{ isUserEditMode ? 'Update' : 'Save' }} User</button>
+      <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
+        {{ isUserEditMode ? 'Update' : 'Save' }} User
+      </button>
     </div>
   </form>
 </p-dialog>
 
+
+
+
+
+<p-dialog header="Create/Edit House" [(visible)]="displayHouseForm" modal="modal" [style]="{'width':'50vw'}" [closable]="true" [dismissableMask]="true">
+  <form #houseForm="ngForm" (ngSubmit)="onSubmitHouse(houseForm)" novalidate>
+
+
+    <div class="form-group mb-3">
+      <label for="housename">House Name</label>
+      <input type="text" id="housename" name="housename" class="form-control"
+             [(ngModel)]="selectedHouse.housename" #housename="ngModel" required>
+      <div *ngIf="housename.invalid && (housename.dirty || housename.touched)" class="text-danger">
+        <div *ngIf="housename.errors?.['required']">House Name is required.</div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="meterNumber">Meter Number</label>
+      <input type="text" id="meterNumber" name="meterNumber" class="form-control"
+             [(ngModel)]="selectedHouse.meterNumber" #meterNumber="ngModel" required pattern="^SM\d+$">
+      <div *ngIf="meterNumber.invalid && (meterNumber.dirty || meterNumber.touched)" class="text-danger">
+        <div *ngIf="meterNumber.errors?.['required']">Meter Number is required.</div>
+        <div *ngIf="meterNumber.errors?.['pattern']">Meter Number must start with 'SM' followed by digits.</div>
+      </div>
+      <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="address">Address</label>
+      <input type="text" id="address" name="address" class="form-control"
+             [(ngModel)]="selectedHouse.address" #address="ngModel" required>
+      <div *ngIf="address.invalid && (address.dirty || address.touched)" class="text-danger">
+        <div *ngIf="address.errors?.['required']">Address is required.</div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="city">City</label>
+      <input type="text" id="city" name="city" class="form-control"
+             [(ngModel)]="selectedHouse.city" #city="ngModel" required>
+      <div *ngIf="city.invalid && (city.dirty || city.touched)" class="text-danger">
+        <div *ngIf="city.errors?.['required']">City is required.</div>
+      </div>
+    </div>
+    <div class="form-group mb-3">
+      <label for="state">State</label>
+      <input type="text" id="state" name="state" class="form-control"
+             [(ngModel)]="selectedHouse.state" #state="ngModel" required>
+      <div *ngIf="state.invalid && (state.dirty || state.touched)" class="text-danger">
+        <div *ngIf="state.errors?.['required']">State is required.</div>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="owner">Owner</label>
+      <select id="owner" name="owner" class="form-control"
+              [(ngModel)]="selectedHouse.owner" #owner="ngModel" required>
+        <option *ngFor="let user of customers" [value]="user.username">{{ user.username }}</option>
+      </select>
+      <div *ngIf="owner.invalid && (owner.dirty || owner.touched)" class="text-danger">
+        <div *ngIf="owner.errors?.['required']">Owner is required.</div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-primary" [disabled]="houseForm.invalid">
+        {{ isHouseEditMode ? 'Update' : 'Save' }} House
+      </button>
+    </div>
+  </form>
+</p-dialog>
+
+
+<p-dialog header="Create/Edit Bill" [(visible)]="displayBillForm" modal="modal" [style]="{'width':'50vw'}" [closable]="true" [dismissableMask]="true">
+  <form #billForm="ngForm" (ngSubmit)="onSubmitBill(billForm)" novalidate>
+
+    <div class="form-group mb-3">
+      <label for="usedUnit">Used Unit in Watt</label>
+      <input type="number" id="usedUnit" name="usedUnit" class="form-control"
+             [(ngModel)]="selectedBill.usedUnit" #usedUnit="ngModel" required min="0" step="0.1"
+             (ngModelChange)="calculateTotal()">
+      <div *ngIf="usedUnit.invalid && (usedUnit.dirty || usedUnit.touched)" class="text-danger">
+        <div *ngIf="usedUnit.errors?.['required']">Used Unit is required.</div>
+        <div *ngIf="usedUnit.errors?.['min']">Used Unit must be greater than or equal to 0.</div>
+      </div>
+    </div>
+
+    <!-- Total Field -->
+    <div class="form-group mb-3">
+      <label for="total">Total</label>
+      <input type="number" id="total" name="total" class="form-control"
+             [(ngModel)]="selectedBill.total" #total="ngModel" required min="0" step="0.01" readonly>
+      <div *ngIf="total.invalid && (total.dirty || total.touched)" class="text-danger">
+        <div *ngIf="total.errors?.['required']">Total is required.</div>
+        <div *ngIf="total.errors?.['min']">Total must be greater than or equal to 0.</div>
+      </div>
+    </div>
+
+    <!-- Bill Status Field -->
+    <div class="form-group mb-3">
+      <label for="billStatus">Bill Status</label>
+      <select id="billStatus" name="billStatus" class="form-control"
+              [(ngModel)]="selectedBill.billStatus" #billStatus="ngModel" required>
+        <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+      </select>
+      <div *ngIf="billStatus.invalid && (billStatus.dirty || billStatus.touched)" class="text-danger">
+        <div *ngIf="billStatus.errors?.['required']">Bill Status is required.</div>
+      </div>
+    </div>
+
+<div class="form-group mb-3">
+  <label for="houseName">House Name</label>
+  <select id="houseName" name="houseName" class="form-control"
+          [(ngModel)]="selectedBill.housename" #housename="ngModel" required>
+    <option *ngIf="!allHousesnames.length" disabled>Loading...</option>
+    <option *ngFor="let housename of allHousesnames" [value]="housename">
+      {{ housename }}
+    </option>
+  </select>
+  <div *ngIf="housename.invalid && (housename.dirty || housename.touched)" class="text-danger">
+    <div *ngIf="housename.errors?.['required']">House Name is required.</div>
+  </div>
+</div>
+
+<div class="form-group mb-3">
+  <label for="owner">Owner</label>
+  <select id="owner" name="owner" class="form-control"
+          [(ngModel)]="selectedBill.owner" #owner="ngModel" required>
+    <option *ngFor="let user of customers" [value]="user.username">{{ user.username }}</option>
+  </select>
+  <div *ngIf="owner.invalid && (owner.dirty || owner.touched)" class="text-danger">
+    <div *ngIf="owner.errors?.['required']">Owner is required.</div>
+  </div>
+</div>
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-primary" [disabled]="billForm.invalid">
+        {{ isBillEditMode ? 'Update' : 'Save' }} Bill
+      </button>
+    </div>
+  </form>
+</p-dialog>

@@ -1,18 +1,18 @@
 import {
-  ObjectUtils,
-  PrimeNGConfig,
-  PrimeTemplate,
-  SharedModule,
-  UniqueComponentId
-} from "./chunk-LQPFRQ5Q.js";
-import {
   DOCUMENT,
   NgClass,
   NgIf,
   NgStyle,
   NgTemplateOutlet,
   isPlatformBrowser
-} from "./chunk-3CGXVUBG.js";
+} from "./chunk-SPQ6GSH7.js";
+import {
+  ObjectUtils,
+  PrimeNGConfig,
+  PrimeTemplate,
+  SharedModule,
+  UniqueComponentId
+} from "./chunk-Z2WZUCZO.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -65,7 +65,7 @@ import {
   ɵɵtemplate,
   ɵɵtext,
   ɵɵtextInterpolate
-} from "./chunk-JTRJNW5M.js";
+} from "./chunk-VZ4QXSD6.js";
 
 // node_modules/primeng/fesm2022/primeng-dom.mjs
 var DomHandler = class _DomHandler {
@@ -2095,14 +2095,14 @@ var ButtonModule = class _ButtonModule {
 export {
   DomHandler,
   ConnectedOverlayScrollHandler,
-  BaseIcon,
-  Ripple,
-  RippleModule,
   AutoFocus,
   AutoFocusModule,
+  BaseIcon,
   SpinnerIcon,
+  Ripple,
+  RippleModule,
   ButtonDirective,
   Button,
   ButtonModule
 };
-//# sourceMappingURL=chunk-JSQWLFMQ.js.map
+//# sourceMappingURL=chunk-W7UN56LY.js.map

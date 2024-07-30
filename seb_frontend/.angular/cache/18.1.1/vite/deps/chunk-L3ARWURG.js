@@ -1,7 +1,7 @@
 import {
   DOCUMENT,
   isPlatformBrowser
-} from "./chunk-3CGXVUBG.js";
+} from "./chunk-SPQ6GSH7.js";
 import {
   APP_ID,
   BehaviorSubject,
@@ -81,7 +81,7 @@ import {
   ɵɵqueryRefresh,
   ɵɵstyleProp,
   ɵɵviewQuery
-} from "./chunk-JTRJNW5M.js";
+} from "./chunk-VZ4QXSD6.js";
 
 // node_modules/@angular/cdk/fesm2022/platform.mjs
 var hasV8BreakIterator;
@@ -4386,4 +4386,4 @@ export {
   CdkScrollableModule,
   ScrollingModule
 };
-//# sourceMappingURL=chunk-6EEFQODV.js.map
+//# sourceMappingURL=chunk-L3ARWURG.js.map

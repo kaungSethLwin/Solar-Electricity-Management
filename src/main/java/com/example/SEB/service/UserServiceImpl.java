@@ -1,5 +1,6 @@
 package com.example.SEB.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,11 +8,13 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.SEB.Repository.UserRepository;
 import com.example.SEB.dto.UserDto;
 import com.example.SEB.entities.User;
+import com.example.SEB.enums.UserRole;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +31,9 @@ public class UserServiceImpl implements UserService {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
-                return userRepository.findFirstByEmail(email).orElseThrow(() ->new UsernameNotFoundException("User not Found"));
+                User user = userRepository.findFirstByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
             }
         };
     }
@@ -82,13 +87,21 @@ public class UserServiceImpl implements UserService {
         user.setUserId(userDto.getUserId());
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setActive(userDto.isActive());
         user.setCreateDate(userDto.getCreateDate());
         user.setRole(userDto.getRole());
         user.setHouses(userDto.getHouses().stream().map(houseService::convertToEntity).collect(Collectors.toList()));
         return user;
+    }
+
+    @Override
+    public List<UserDto> getAllCustomers() {
+        List<User> customers = userRepository.getAllCustomersNames();
+        return customers.stream()
+                        .map(this::convertToDto)
+                        .collect(Collectors.toList());
     }
     
 }

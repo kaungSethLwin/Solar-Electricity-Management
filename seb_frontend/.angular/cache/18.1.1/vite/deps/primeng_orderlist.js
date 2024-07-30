@@ -2,7 +2,7 @@ import {
   AngleDownIcon,
   AngleUpIcon,
   SearchIcon
-} from "./chunk-JJQKBO5C.js";
+} from "./chunk-QNQA2S4D.js";
 import {
   BaseIcon,
   ButtonDirective,
@@ -10,15 +10,7 @@ import {
   DomHandler,
   Ripple,
   RippleModule
-} from "./chunk-JSQWLFMQ.js";
-import {
-  FilterService,
-  ObjectUtils,
-  PrimeNGConfig,
-  PrimeTemplate,
-  SharedModule,
-  UniqueComponentId
-} from "./chunk-LQPFRQ5Q.js";
+} from "./chunk-W7UN56LY.js";
 import {
   CdkScrollableModule,
   Directionality,
@@ -32,7 +24,7 @@ import {
   isFakeMousedownFromScreenReader,
   isFakeTouchstartFromScreenReader,
   normalizePassiveListenerOptions
-} from "./chunk-6EEFQODV.js";
+} from "./chunk-L3ARWURG.js";
 import {
   CommonModule,
   DOCUMENT,
@@ -42,7 +34,15 @@ import {
   NgStyle,
   NgTemplateOutlet,
   isPlatformBrowser
-} from "./chunk-3CGXVUBG.js";
+} from "./chunk-SPQ6GSH7.js";
+import {
+  FilterService,
+  ObjectUtils,
+  PrimeNGConfig,
+  PrimeTemplate,
+  SharedModule,
+  UniqueComponentId
+} from "./chunk-Z2WZUCZO.js";
 import {
   ApplicationRef,
   BehaviorSubject,
@@ -132,7 +132,7 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate,
   ɵɵviewQuery
-} from "./chunk-JTRJNW5M.js";
+} from "./chunk-VZ4QXSD6.js";
 
 // node_modules/@angular/cdk/fesm2022/drag-drop.mjs
 function deepCloneNode(node) {

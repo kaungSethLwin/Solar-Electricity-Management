@@ -4,13 +4,14 @@ import { StorageService } from '../../../../service/storage/storage.service';
 import { Router } from '@angular/router';
 import { PrimeNGSharedModule } from './primeng-shared.module';
 import { CommonModule } from '@angular/common'; 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Table } from 'primeng/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ComfirmDialogComponent } from '../../../comfirm-dialog/comfirm-dialog.component';
 import { UserRole } from './user-role';
 import { DialogModule } from 'primeng/dialog';
-import { SignUpRequest } from './SignUpRequest';
+import { Status } from './BillStatus';
+import { Bill } from './Bill';
 
 
 
@@ -23,6 +24,7 @@ import { SignUpRequest } from './SignUpRequest';
 })
 export class DashboardComponent implements OnInit {
 
+
   UserRole = UserRole; 
 
   houses: any[] = [];
@@ -31,22 +33,32 @@ export class DashboardComponent implements OnInit {
   bill: any;
   users: any[] = [];
   reports: any[] = [];
+  customers: any[] = [];
+  allHousesnames: any[] = [];
+  statusOptions: Status[] = []
   report: any;
   user: any;
-  username: string | undefined;
+  showusername: string = '';
   selectedUser : any ={};
+  selectedHouse : any = {};
+  selectedBill : any ={};
 
   displayHouses: boolean = true;
   displayBills: boolean = false;
   displayUsers: boolean = false;
   displayReport: boolean= false;
   displayUserForm: boolean = false;
-  
+  displayHouseForm: boolean =false;
+  displayBillForm:boolean =false;
+  isHouseEditMode: boolean = false;
   isUserEditMode: boolean = false;
+  isBillEditMode: boolean = false;
+  
   searchOwner: any;
   searchStatus: any;
   searchUsername: any;
   errorMessage: string | null = null;
+  private readonly ratePerUnit = 100;
 
 
   @ViewChild('dt2') dt2: Table | undefined;
@@ -62,18 +74,41 @@ export class DashboardComponent implements OnInit {
     this.getAllBills();
     this.getAllUsers();
     this.getAllReport();
-    this.username = this.showUserName(); 
+    this.getAllCustomers();
+    this.getAllHousenames();
+    this.showusername = this.showUserName(); 
+    console.log('Username:', this.showusername);
+    console.log(typeof this.showusername);
+    this.statusOptions = [
+      Status.UNPAID,
+      Status.PAID,
+      Status.OVERDUE
+    ];
+
     
   }
 
   showUserName(): string {
     return StorageService.getUsername(); 
+    
   }
 
-  showDialog(): void {
+  showDialogforUser(): void {
     this.selectedUser = {};
     this.displayUserForm = true;
-    this.isUserEditMode = true;
+    this.isUserEditMode = false;
+  }
+
+  showDialogforHouse(): void {
+    this.selectedHouse = {};
+    this.displayHouseForm = true;
+    this.isHouseEditMode = false;
+  }
+
+  showDialogforBill():void{
+    this.selectedBill = {};
+    this.displayBillForm =true;
+    this.isBillEditMode = false;
   }
 
   onGlobalFilter(event: Event) {
@@ -85,29 +120,41 @@ export class DashboardComponent implements OnInit {
   }
   
 
-  // House endpoints
-  createOrUpdateHouse(house: any): void {
-    this.adminService.createOrUpdateHouse(house).subscribe(
-      (response) => {
-        console.log('House created/updated:', response);
-        this.getAllHouses();
-      },
-      (error) => {
-        console.error('Error creating/updating house:', error);
-      }
-    );
+
+  updateHouse(house: any): void {
+    this.selectedHouse = { ...house }; 
+    this.isHouseEditMode = true;
+    this.displayHouseForm = true;
   }
 
-  getHouseById(houseId: number): void {
-    this.adminService.getHouseById(houseId).subscribe(
-      (response) => {
-        this.house = response;
-        console.log('House details:', this.house);
-      },
-      (error) => {
-        console.error('Error fetching house details:', error);
-      }
-    );
+  onSubmitHouse(form: any): void {
+    if (this.isHouseEditMode) {
+      this.adminService.updateHouse(this.selectedHouse).subscribe(
+        (response) => {
+          console.log('House updated:', response);
+          this.getAllHouses();
+          this.displayHouseForm = false;
+        },
+        (error) => {
+          console.error('Error updating house:', error);
+          this.errorMessage = error.error.message;
+        }
+      );
+    } else {
+      this.adminService.createHouse(this.selectedHouse).subscribe(
+        (response) => {
+          console.log('House created:', response);
+          this.getAllHouses();
+          this.displayHouseForm = false;
+        },
+        (error) => {
+          if(error.status === 406){
+            console.error('Error updating user:', error);
+            this.errorMessage = "Meter Name already created";
+          }
+        }
+      );
+    }
   }
 
   getAllHouses(): void {
@@ -123,7 +170,7 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteHouse(houseId: number): void {
-    console.log('Deleting house with ID:', houseId); // Log to verify the value
+    console.log('Deleting house with ID:', houseId);
     if (houseId === undefined || houseId === null) {
         console.error('House ID is invalid:', houseId);
         return;
@@ -150,21 +197,33 @@ export class DashboardComponent implements OnInit {
     });
 }
 
+getAllCustomers(): void {
+  this.adminService.getAllCustomers().subscribe(
+    (response) => {
+      this.customers = response;
+      console.log(this.customers);
+    },
+    (error) => {
+      console.error('Error fetching customers:', error);
+    }
+  );
+}
+
+getAllHousenames() :void{
+  this.adminService.getAllHouseNames().subscribe(
+    (response) =>{
+      this.allHousesnames = response;
+      console.log("House Names ", this.allHousesnames);
+    },
+    (error) =>{
+      console.error("Error Fetching House Names: ", error)
+    }
+  )
+}
   
 
 
-  // Bill endpoints
-  createOrUpdateBill(bill: any): void {
-    this.adminService.createOrUpdateBill(bill).subscribe(
-      (response) => {
-        console.log('Bill created/updated:', response);
-        this.getAllBills();
-      },
-      (error) => {
-        console.error('Error creating/updating bill:', error);
-      }
-    );
-  }
+
 
   getBillById(billId: number): void {
     this.adminService.getBillById(billId).subscribe(
@@ -196,6 +255,8 @@ export class DashboardComponent implements OnInit {
       data: { message: 'Are you sure you want to delete this Bills?' }
     });
 
+    console.log(billId)
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.adminService.deleteBill(billId).subscribe(
@@ -214,24 +275,46 @@ export class DashboardComponent implements OnInit {
       }
 
 
-
-      updateUser(user: any): void {
-        this.selectedUser = { ...user }; // Copy the user data to selectedUser
-        this.isUserEditMode = true;
-        this.displayUserForm = true;
-      }
-
-  getUserById(userId: number): void {
-    this.adminService.getUserById(userId).subscribe(
-      (response) => {
-        this.user = response;
-        console.log('User details:', this.user);
-      },
-      (error) => {
-        console.error('Error fetching user details:', error);
-      }
-    );
+      
+      
+  updateBill(bill: any) :void{
+    console.log('Updating bill:', bill);
+    this.selectedBill = { ...bill };
+    console.log('Selected Bill:', this.selectedBill);
+     this.isBillEditMode = true;
+     this.displayBillForm =true;
   }
+
+  onSubmitBill(form: any): void {
+    if (this.isBillEditMode) {
+      this.adminService.updateBill(this.selectedBill).subscribe(
+        (response) => {
+          console.log('Bill updated:', response);
+          this.getAllBills(); 
+          this.displayBillForm = false;
+        },
+        (error) => {
+          this.handleError(error);
+        }
+      );
+    } else {
+      this.adminService.createBill(this.selectedBill).subscribe(
+        (response) => {
+          console.log('Bill created:', response);
+          this.getAllBills();
+          this.displayBillForm = false;
+        },
+        (error) => {
+          this.handleError(error);
+        }
+      );
+    }
+  }
+  
+
+
+  //User EndPoints
+
 
   getAllUsers(): void {
     this.adminService.getAllUsers().subscribe(
@@ -243,6 +326,12 @@ export class DashboardComponent implements OnInit {
         console.error('Error fetching all users:', error);
       }
     );
+  }
+
+  updateUser(user: any): void {
+    this.selectedUser = { ...user }; // Copy the user data to selectedUser
+    this.isUserEditMode = true;
+    this.displayUserForm = true;
   }
 
   
@@ -268,7 +357,7 @@ export class DashboardComponent implements OnInit {
     });
       }
 
-      onSubmitUser(form: any): void {
+  onSubmitUser(form: any): void {
         if (this.isUserEditMode) {
           this.adminService.updateUser(this.selectedUser).subscribe(
             (response) => {
@@ -289,8 +378,10 @@ export class DashboardComponent implements OnInit {
               this.displayUserForm = false;
             },
             (error) => {
-              console.error('Error creating user:', error);
-              this.errorMessage = error.error.message;
+              if(error.status === 406){
+                console.error('Error updating user:', error);
+                this.errorMessage = "Email already created";
+              }
             }
           );
         }
@@ -298,7 +389,7 @@ export class DashboardComponent implements OnInit {
 
   //Reports
   getAllReport():void{
-    this.adminService.getAllreports().subscribe(
+    this.adminService.getAllReports().subscribe(
       (response) =>{
         this.reports =response;
         console.log("Reports: ", this.reports );
@@ -341,4 +432,21 @@ export class DashboardComponent implements OnInit {
     this.displayUsers = false;
     this.displayReport = true;
   }  
+
+  private handleError(error: any): void {
+    if (error.status === 406) {
+      console.error('Error creating/updating bill:', error);
+      this.errorMessage = "A bill with these details already exists.";
+    } else {
+      this.errorMessage = error.error.message || 'An error occurred while processing the bill.';
+    }
+  }
+
+  calculateTotal(): void {
+    if (this.selectedBill.usedUnit) {
+      this.selectedBill.total = this.selectedBill.usedUnit * this.ratePerUnit;
+    } else {
+      this.selectedBill.total = 0;
+    }
+  }
 }

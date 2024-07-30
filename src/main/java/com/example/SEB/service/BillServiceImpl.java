@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -31,36 +32,15 @@ public class BillServiceImpl implements BillService {
     @Override
     @Transactional
     public BillDto saveBill(BillDto billDto) {
-        Bill bill = convertToEntity(billDto);
-    
-        // Get houseName from billDto
-        String houseName = billDto.getHousename();
-    
-        if (houseName != null && !houseName.isEmpty()) {
-            // Find the house by its name
-            House house = houseRepository.findByHousename(houseName)
-                .orElseThrow(() -> new IllegalArgumentException("House not found"));
-    
-            // Set the house in the Bill entity
-            bill.setHouse(house);
-    
-            // Set the owner in the BillDto
-            billDto.setOwner(house.getUser() != null ? house.getUser().getUsername() : null);
-        } else {
-            throw new IllegalArgumentException("House name must be provided");
-        }
-    
-        // Save the bill
-        bill = billRepository.save(bill);
-    
-        return convertToDto(bill);
-    }
+     Bill bill = convertToEntity(billDto);
+     System.out.println("BILL DTO:" + billDto.toString());
+
+     Bill savedBill = billRepository.save(bill);
+    return convertToDto(savedBill);
+   }
     
 
     
-
-    
-
 
     @Override
     public Optional<BillDto> getBillById(int billId) {
@@ -119,12 +99,25 @@ public class BillServiceImpl implements BillService {
     billDto.setUsedUnit(bill.getUsedUnit());
     billDto.setTotal(bill.getTotal());
     billDto.setBillStatus(bill.getBillStatus());
-    billDto.setBillDate(bill.getBillDate());
-    billDto.setDueDate(bill.getDueDate());
-    billDto.setPaidDate(bill.getPaidDate());
+     // Set the current date as the bill date
+    Date billDate = new Date();
+    billDto.setBillDate(billDate);
+
+    // Calculate the due date as 15 days after the bill date
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(billDate);
+    calendar.add(Calendar.DAY_OF_MONTH, 15);
+    Date dueDate = calendar.getTime();
+    billDto.setDueDate(dueDate);
+    // Set the paid date based on the status change
+    if (bill.getBillStatus() == Status.PAID) {
+        billDto.setPaidDate(bill.getPaidDate() != null ? bill.getPaidDate() : new Date());
+    } else {
+        billDto.setPaidDate(null); // or set it to some default value if needed
+    }
+
     
     if (bill.getHouse() != null) {
-        // Set the house name directly
         billDto.setHousename(bill.getHouse().getHousename());
     }
 
@@ -144,24 +137,45 @@ public Bill convertToEntity(BillDto billDto) {
     bill.setUsedUnit(billDto.getUsedUnit());
     bill.setTotal(billDto.getTotal());
     bill.setBillStatus(billDto.getBillStatus());
-    bill.setBillDate(billDto.getBillDate());
-    bill.setDueDate(billDto.getDueDate());
-    bill.setPaidDate(billDto.getPaidDate());
-    
-    if (billDto.getHousename() != null) {
-        // Fetch the house entity by house name
-        House house = houseRepository.findByHousename(billDto.getHousename())
-            .orElseThrow(() -> new IllegalArgumentException("House not found"));
 
-        bill.setHouse(house);
+    // Set the bill date to the current date and time
+    Date billDate = new Date();
+    bill.setBillDate(billDate);
+
+    // Calculate the due date as 15 days after the bill date
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(billDate);
+    calendar.add(Calendar.DAY_OF_MONTH, 15);
+    Date dueDate = calendar.getTime();
+    bill.setDueDate(dueDate);
+
+    // Set the paid date based on the status change
+    if (bill.getBillStatus() == Status.PAID) {
+        bill.setPaidDate(billDto.getPaidDate() != null ? billDto.getPaidDate() : new Date());
     } else {
-        throw new IllegalArgumentException("House name must be provided");
+        bill.setPaidDate(null); // or set it to some default value if needed
     }
+
+    String housename = billDto.getHousename();
+    House house = houseRepository.findByHousename(housename)
+        .orElseThrow(() -> new RuntimeException("House not found with name: " + housename));
+    bill.setHouse(house);
 
     return bill;
 }
 
 
-     
+
+
+@Override
+public List<BillDto> getAllBillsByHouses(List<HouseDto> houseDtos) {
+    List<Integer> houseIds = houseDtos.stream()
+    .map(HouseDto::getHouseId)
+    .collect(Collectors.toList());
+
+    List<Bill> bills = billRepository.findAllBillsByHouseIds(houseIds);
+
+    return bills.stream().map(this::convertToDto).collect(Collectors.toList());
+}
 
 }

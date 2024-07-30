@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.example.SEB.entities.Bill;
 import com.example.SEB.entities.House;
@@ -27,4 +28,7 @@ public interface BillRepository extends JpaRepository<Bill,Integer> {
      List<Bill> findByPaidDate(Date paidDate);
 
       List<Bill> findByHouseInAndBillStatus(List<House> houses, Status billStatus);
+
+      @Query("SELECT b FROM Bill b WHERE b.house.id IN :houseIds")
+    List<Bill> findAllBillsByHouseIds(List<Integer> houseIds);
 }

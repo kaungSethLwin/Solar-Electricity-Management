@@ -34,10 +34,10 @@ public class Bill {
     @Enumerated(EnumType.STRING) 
     private Status billStatus;
 
-    @Column(name="BIll_DATE",nullable=false)
+    @Column(name="BIll_DATE")
     private Date billDate;
 
-    @Column(name="DUE_DATE",nullable = false)
+    @Column(name="DUE_DATE")
     private Date dueDate;
 
     @Column(name="PAID_DATE")

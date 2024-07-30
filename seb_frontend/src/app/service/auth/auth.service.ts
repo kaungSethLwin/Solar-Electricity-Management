@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 const BASE_URL = "http://localhost:8070/"
 
@@ -11,15 +11,13 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  createUser(createRequest: any):Observable<any>{
-    return this.http.post(BASE_URL + "api/auth/createUser", createRequest);
-    
-  }
-
-  login(loginRequest: any):Observable<any>{
+  login(loginRequest: { email: string, password: string }): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
-  return this.http.post(BASE_URL + 'api/auth/login', loginRequest, { headers });
-    
-  }
+    return this.http.post(BASE_URL + 'api/auth/login', loginRequest, { headers });
+}
+
+  
+
+  
 
 }

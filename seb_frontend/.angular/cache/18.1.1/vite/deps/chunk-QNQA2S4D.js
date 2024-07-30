@@ -1,9 +1,9 @@
 import {
   BaseIcon
-} from "./chunk-JSQWLFMQ.js";
+} from "./chunk-W7UN56LY.js";
 import {
   UniqueComponentId
-} from "./chunk-LQPFRQ5Q.js";
+} from "./chunk-Z2WZUCZO.js";
 import {
   Component,
   setClassMetadata,
@@ -19,7 +19,7 @@ import {
   ɵɵgetInheritedFactory,
   ɵɵnamespaceSVG,
   ɵɵproperty
-} from "./chunk-JTRJNW5M.js";
+} from "./chunk-VZ4QXSD6.js";
 
 // node_modules/primeng/fesm2022/primeng-icons-angledown.mjs
 var AngleDownIcon = class _AngleDownIcon extends BaseIcon {
@@ -196,4 +196,4 @@ export {
   AngleUpIcon,
   SearchIcon
 };
-//# sourceMappingURL=chunk-JJQKBO5C.js.map
+//# sourceMappingURL=chunk-QNQA2S4D.js.map
