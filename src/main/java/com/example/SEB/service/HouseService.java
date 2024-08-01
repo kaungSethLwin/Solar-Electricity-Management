@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.SEB.dto.HouseDto;
+import com.example.SEB.dto.UserDto;
 import com.example.SEB.entities.House;
 
 public interface HouseService {
@@ -43,4 +44,6 @@ public interface HouseService {
   boolean hasMeterNumber(String number);
   
   List<String> getAllHouseNames();
+
+   List<HouseDto> findHousesByUser(UserDto userDto);
 }

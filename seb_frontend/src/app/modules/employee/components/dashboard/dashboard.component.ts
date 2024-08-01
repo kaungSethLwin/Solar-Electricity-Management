@@ -9,7 +9,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { ComfirmDialogComponent } from '../../../comfirm-dialog/comfirm-dialog.component';
 import { DialogModule } from 'primeng/dialog';
 import { Status } from '../../../admin/components/dashboard/BillStatus';
-import { Bill } from '../../../admin/components/dashboard/Bill';
 import { EmployeeService } from '../../services/employee.service';
 
 
@@ -360,7 +359,9 @@ getAllHousenames() :void{
 
   calculateTotal(): void {
     if (this.selectedBill.usedUnit) {
-      this.selectedBill.total = this.selectedBill.usedUnit * this.ratePerUnit;
+      const baseTotal = this.selectedBill.usedUnit * this.ratePerUnit 
+      const tax = 0.05; // 5% tax
+      this.selectedBill.total = baseTotal * (1 + tax);
     } else {
       this.selectedBill.total = 0;
     }

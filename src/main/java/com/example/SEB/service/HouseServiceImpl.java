@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.SEB.Repository.HouseRepository;
 import com.example.SEB.Repository.UserRepository;
 import com.example.SEB.dto.HouseDto;
+import com.example.SEB.dto.UserDto;
 import com.example.SEB.entities.Bill;
 import com.example.SEB.entities.House;
 import com.example.SEB.entities.User;
@@ -116,6 +117,15 @@ public class HouseServiceImpl implements HouseService{
     @Override
     public List<String> getAllHouseNames() {
         return houseRepository.findAllHouseNames();
+    }
+
+    @Override
+    public List<HouseDto> findHousesByUser(UserDto userDto) {
+        // Fetch houses based on the userId from UserDto
+        List<House> houses = houseRepository.findByUser_UserId(userDto.getUserId());
+        return houses.stream()
+                     .map(this::convertToDto)
+                     .collect(Collectors.toList());
     }
 
 

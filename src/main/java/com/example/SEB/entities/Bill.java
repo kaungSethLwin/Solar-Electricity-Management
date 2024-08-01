@@ -43,6 +43,15 @@ public class Bill {
     @Column(name="PAID_DATE")
     private Date paidDate;
 
+    @Column(name="meter_number")
+    private String meterNumber;
+
+    @Column(name="house_number")
+    private String housenumber;
+
+    @Column(name="owner")
+    private String owner;
+
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "HOUSE_ID")
     private House house;

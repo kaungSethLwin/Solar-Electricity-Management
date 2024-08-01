@@ -5,6 +5,7 @@ export class Bill {
     total: number;
     billStatus: Status;
     housename: string;
+    meterNumber:string;
     owner: string;
     billDate?: Date;  
     dueDate?: Date;   
@@ -15,6 +16,7 @@ export class Bill {
         total: number,
         billStatus: Status,
         housename: string,
+        meterNumber:string,
         owner: string,
         billDate?: Date,
         dueDate?: Date,
@@ -24,6 +26,7 @@ export class Bill {
         this.total = total;
         this.billStatus = billStatus;
         this.housename = housename;
+        this.meterNumber = meterNumber;
         this.owner = owner;
         this.billDate = billDate;
         this.dueDate = dueDate;

@@ -119,6 +119,7 @@ public class BillServiceImpl implements BillService {
     
     if (bill.getHouse() != null) {
         billDto.setHousename(bill.getHouse().getHousename());
+        billDto.setMeterNumber(bill.getMeterNumber());
     }
 
     // Optionally set the owner if you have the information
@@ -160,6 +161,8 @@ public Bill convertToEntity(BillDto billDto) {
     House house = houseRepository.findByHousename(housename)
         .orElseThrow(() -> new RuntimeException("House not found with name: " + housename));
     bill.setHouse(house);
+    bill.setMeterNumber(house.getMeterNumber());
+    bill.setOwner(house.getUser().getUsername());
 
     return bill;
 }

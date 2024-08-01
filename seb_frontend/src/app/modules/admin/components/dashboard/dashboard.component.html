@@ -92,12 +92,14 @@
       <ng-template pTemplate="header">
         <tr>
           <th class="table-cell-padding">Bill ID</th>
+          <th class="table-cell-padding">House Name</th>
+          <th class="table-cell-padding">Owner</th>
+          <th class="table-cell-padding">Meter Number</th>
           <th class="table-cell-padding">Used Unit</th>
           <th class="table-cell-padding">Total</th>
           <th pSortableColumn="billStatus" class="table-cell-padding">Status</th>
           <th pSortableColumn="billDate" class="table-cell-padding">Create Date</th>
-          <th class="table-cell-padding">House Name</th>
-          <th class="table-cell-padding">Owner</th>
+
           <th pSortableColumn="dueDate" class="table-cell-padding">DueDate</th>
           <th pSortableColumn="paidDate" class="table-cell-padding">PaidDate</th>
           <th class="table-cell-padding">Actions</th>
@@ -106,8 +108,11 @@
       <ng-template pTemplate="body" let-bill>
         <tr>
           <td class="table-cell-padding">{{ bill.billId }}</td>
+          <td class="table-cell-padding">{{ bill.housename }}</td>
+          <td class="table-cell-padding">{{ bill.owner }}</td>
+          <td class="table-cell-padding">{{ bill.meterNumber }}</td>
           <td class="table-cell-padding">{{ bill.usedUnit }} Watt</td>
-          <td class="table-cell-padding">{{ bill.totalAmount }}</td>
+          <td class="table-cell-padding">{{ bill.total }} MMK</td>
           <td class="table-cell-padding"
              [ngClass]="{
                    'status-unpaid': bill.billStatus === 'UNPAID',
@@ -118,8 +123,6 @@
           </td>
 
           <td class="table-cell-padding">{{ bill.billDate | date: 'dd/MM/yyyy' }}</td>
-          <td class="table-cell-padding">{{ bill.housename }}</td>
-          <td class="table-cell-padding">{{ bill.owner }}</td>
           <td class="table-cell-padding">{{ bill.dueDate | date: 'dd/MM/yyyy' }}</td>
           <td class="table-cell-padding">{{ bill.paidDate ? (bill.paidDate | date: 'dd/MM/yyyy') : 'Not Paid' }}</td>
           <td class="table-cell-padding">
@@ -211,7 +214,9 @@
         <tr>
           <th class="table-cell-padding">House ID</th>
           <th class="table-cell-padding">Bill Id</th>
+          <th class="table-cell-padding">House Name</th>
           <th class="table-cell-padding">User Name</th>
+          <th class="table-cell-padding">Meter Number</th>
           <th class="table-cell-padding">Used Unit</th>
           <th pSortableColumn="userRole" class="table-cell-padding">Total</th>
           <th pSortableColumn="createDate" class="table-cell-padding">Bill Status</th>
@@ -224,7 +229,9 @@
         <tr>
           <td class="table-cell-padding">{{ report.houseId }}</td>
           <td class="table-cell-padding">{{ report.billId }}</td>
+          <td class="table-cell-padding">{{ report.housename }}</td>
           <td class="table-cell-padding">{{ report.username }}</td>
+          <td class="table-cell-padding">{{ report.meterNumber }}</td>
           <td class="table-cell-padding">{{ report.usedUnit }} Watt</td>
           <td class="table-cell-padding">{{ report.total }}</td>
           <td class="table-cell-padding"

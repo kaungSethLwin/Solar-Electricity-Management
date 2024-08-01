@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.example.SEB.Repository.UserRepository;
 import com.example.SEB.dto.UserDto;
 import com.example.SEB.entities.User;
-import com.example.SEB.enums.UserRole;
 
 import lombok.RequiredArgsConstructor;
 
@@ -102,6 +101,17 @@ public class UserServiceImpl implements UserService {
         return customers.stream()
                         .map(this::convertToDto)
                         .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<UserDto> findByEmail(String email) {
+        User user = userRepository.findFirstByEmail(email)
+        .orElseThrow(() -> new UsernameNotFoundException("Email not found: " + email));
+
+        // Convert User entity to UserDto  
+        UserDto userDto = convertToDto(user);
+
+       return Optional.of(userDto);
     }
     
 }

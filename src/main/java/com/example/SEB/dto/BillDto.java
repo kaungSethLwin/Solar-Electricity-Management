@@ -20,5 +20,6 @@ public class BillDto {
     private Date dueDate;
     private Date paidDate;
     private String housename; 
+    private String meterNumber;
     private String owner;
 }
