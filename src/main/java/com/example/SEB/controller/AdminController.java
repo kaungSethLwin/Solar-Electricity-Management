@@ -45,19 +45,18 @@ public class AdminController {
     @Autowired
      private final ReportService reportService;
    
-   // Create a house
-   @PostMapping("/houses/create")
-    public ResponseEntity<String> createHouse(@RequestBody HouseDto houseDto) {
-    if (houseService.hasMeterNumber(houseDto.getMeterNumber())) {
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("House with this meter number already exists.");
-    }
-     HouseDto savedHouse = houseService.saveHouse(houseDto);
-     if(savedHouse == null){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("House not created");
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body("House created successfully.");
-        
+     @PostMapping("/houses/create")
+     public ResponseEntity<HouseDto> createHouse(@RequestBody HouseDto houseDto) {
+         if (houseService.hasMeterNumber(houseDto.getMeterNumber())) {
+             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+         }
+         HouseDto savedHouse = houseService.saveHouse(houseDto);
+         if (savedHouse == null) {
+             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+         }
+         return ResponseEntity.status(HttpStatus.CREATED).body(savedHouse);
      }
+     
 
     // Update a house
     @PostMapping("/houses/update")
@@ -169,22 +168,19 @@ public class AdminController {
                          .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
        }
    
-       // Sign up a user
-       @PostMapping("/user/createUser")
-       public ResponseEntity<String> signupUser(@RequestBody SignUpRequest signupRequest) {
-          
-           if (authService.hasUserEmail(signupRequest.getEmail())) {
-              
-               return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("User already exists with this email");
-           }
-           UserDto createdUser = authService.signupUser(signupRequest);
-   
-           if (createdUser == null) {
-               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not created");
-           }
-           return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
-       }
-  
+    // Sign up a user
+@PostMapping("/user/createUser")
+public ResponseEntity<UserDto> signupUser(@RequestBody SignUpRequest signupRequest) {
+    if (authService.hasUserEmail(signupRequest.getEmail())) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+    }
+    UserDto createdUser = authService.signupUser(signupRequest);
+    if (createdUser == null) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+}
+
        @GetMapping("/users/customers")
       public ResponseEntity<List<UserDto>> getCustomers() {
          List<UserDto> customers = userService.getAllCustomers();

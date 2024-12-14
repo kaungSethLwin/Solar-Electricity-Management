@@ -1,70 +1,69 @@
 .table-cell-padding {
-    padding: 10px; /* Adjust the padding as needed */
+    padding: 10px; 
   }
   
   /* Custom Button Styles */
 .custom-button {
-    background-color: transparent; /* Transparent background */
-    border: 1px solid #ccc; /* Light border color */
-    color: #c9bebe; /* Dark text color */
-    padding: 10px 20px; /* Padding for the button */
-    border-radius: 4px; /* Rounded corners */
-    font-size: 16px; /* Font size for better readability */
+    background-color: transparent; 
+    border: 1px solid #ccc; 
+    color: #c9bebe; 
+    padding: 10px 20px; 
+    border-radius: 4px; 
+    font-size: 16px; 
     transition: all 0.3s ease;
-    margin: 30px 40px; /* Smooth transition for hover effects */
+    margin: 30px 40px; 
   }
   
   .custom-button:hover {
-    background-color: #f8f9fa; /* Light background on hover */
-    border-color: #007bff; /* Border color on hover */
-    color: #007bff; /* Text color on hover */
+    background-color: #f8f9fa;
+    border-color: #007bff;
+    color: #007bff;
   }
   
   .nav-link {
-    text-decoration: none; /* Remove underline */
+    text-decoration: none; 
   }
   
   .nav-pills .nav-link {
-    border-radius: 4px; /* Rounded corners for nav pills */
+    border-radius: 4px;
   }
   
   header {
-    background-color: #23171b; /* Light background for header */
-    padding: 20px; /* Padding for the header */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow for modern look */
+    background-color: #23171b; 
+    padding: 20px; 
+    box-shadow: 0 2px 4px rgba(173, 210, 7, 0.1);
   }
   
   h1 {
     color: #18e9e9; 
-    box-shadow: 0 4px 8px rgba(194, 171, 188, 0.2);/* Dark color for the heading */
+    box-shadow: 0 4px 8px rgba(194, 171, 188, 0.2);
   }
   
 
   .register-button {
     position: sticky;
-    bottom: 10px; /* Adjust this value to control the distance from the bottom */
-    right: 10px; /* Adjust this value to control the distance from the right */
-    background-color: #2ada8b; /* Button background color */
-    color: #fff; /* Button text color */
+    bottom: 10px; 
+    right: 10px; 
+    background-color: #2ada8b;
+    color: #fff; 
     border: none;
-    border-radius: 4px; /* Rounded corners */
-    padding: 10px 20px; /* Padding inside the button */
-    font-size: 16px; /* Font size */
+    border-radius: 4px; 
+    padding: 10px 20px; 
+    font-size: 16px; 
     display: flex;
     align-items: center;
-    gap: 8px; /* Space between icon and text */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth effect */
+    gap: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
     transition: background-color 0.3s ease; 
-    margin-left: 10px;/* Smooth background color transition */
+    margin-left: 10px;
   }
   
   .register-button:hover {
-    background-color: #0056b3; /* Darker color on hover */
+    background-color: #0056b3; 
   }
   
   .register-button i {
-    font-size: 18px; /* Adjust icon size */
+    font-size: 18px; 
   }
   
 
@@ -72,7 +71,7 @@
     background-color: yellow;
     color: black; /* Text color for better contrast */
     border: 2px solid yellow;
-    padding: 10px; /* Padding to make it look like a button */
+    padding: 4px; /* Padding to make it look like a button */
     text-align: center; /* Center-align text */
     cursor: pointer; /* Pointer cursor on hover */
   }
@@ -81,7 +80,7 @@
     background-color: green;
     color: white; /* Text color for better contrast */
     border: 2px solid green;
-    padding: 10px; /* Padding to make it look like a button */
+    padding: 4px; /* Padding to make it look like a button */
     text-align: center; /* Center-align text */
     cursor: pointer; 
     border-radius: 4px;/* Pointer cursor on hover */
@@ -91,7 +90,7 @@
     background-color: red;
     color: white; /* Text color for better contrast */
     border: 2px solid red;
-    padding: 10px; /* Padding to make it look like a button */
+    padding: 4px; /* Padding to make it look like a button */
     text-align: center; /* Center-align text */
     cursor: pointer; /* Pointer cursor on hover */
   }
@@ -216,4 +215,9 @@ p-dialog .text-danger {
 
 .seb-text {
   color: green; /* Green color for SEB */
+}
+
+.table-cell-padding {
+  padding: 12px; /* Adjust padding as needed */
+  text-align: center; /* Center-align text */
 }

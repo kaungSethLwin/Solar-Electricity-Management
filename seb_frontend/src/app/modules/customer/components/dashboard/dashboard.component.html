@@ -70,115 +70,132 @@
       </ng-template>
     </p-table>
   </div>
+</div>
 
-  <p-dialog [(visible)]="showPopup" modal="modal" [responsive]="true" [style]="{width: '600px', height: '800px',}">
-    <div class="p-3 text-center popup-text" id="popupContent">
-      <strong class="signboard-title">
-        <i class="fas fa-sun"></i>  <span class="seb-text">SEB</span> {{ billMonthTitle }}
-      </strong><br />
-      <hr />
-      <div class="row">
-        <div class="col-6">
-          <span class="text-purple">Date:</span>
-        </div>
-        <div class="col-6">
-          <span class="text-danger">{{ currentDate }}</span>
-        </div>
+<p-dialog [(visible)]="showPopup" modal="modal" [responsive]="true" [style]="{width: '600px', height: '800px'}">
+  <div class="p-3 text-center popup-text" id="popupContent">
+    <strong class="signboard-title">
+      <i class="fas fa-sun"></i> <span class="seb-text">SEB</span> {{ billMonthTitle }}
+    </strong><br />
+    <hr />
+    <div class="row">
+      <div class="col-6">
+        <span class="text-purple">Date:</span>
       </div>
-      <div class="row">
-        <div class="col-6">
-          <span class="text-purple">Owner:</span>
-        </div>
-        <div class="col-6">
-          <span class="text-danger">{{ selectedBill?.owner }}</span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <span class="text-purple">Bill Print Date:</span>
-        </div>
-        <div class="col-6">
-          <span class="text-danger">{{ selectedBill?.billDate | date: 'dd/MM/yyyy' }}</span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <span class="text-purple">House Name:</span>
-        </div>
-        <div class="col-6">
-          <span class="text-danger">{{ selectedBill?.housename }}</span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <span class="text-purple">Meter Number:</span>
-        </div>
-        <div class="col-6">
-          <span class="text-danger">{{ selectedBill.meterNumber }}</span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <span class="text-purple">Bill Due Date:</span>
-        </div>
-        <div class="col-6">
-          <span class="text-danger">{{ selectedBill?.dueDate | date: 'dd/MM/yyyy' }}</span>
-        </div>
-      </div>
-      <br />
-      <div class="row">
-        <div class="col-6">
-          <span class="text-purple">Used Unit:</span>
-        </div>
-        <div class="col-6">
-          <span class="text-danger">{{ selectedBill?.usedUnit }} Watt</span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <span class="text-purple">1 unit per MMK:</span>
-        </div>
-        <div class="col-6">
-          <span class="text-danger">100 MMK</span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <span class="text-purple">Tax:</span>
-        </div>
-        <div class="col-6">
-          <span class="text-danger">5%</span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <span class="text-purple">Total:</span>
-        </div>
-        <div class="col-6">
-          <span class="text-danger">{{ selectedBill?.total }} MMK</span>
-        </div>
-      </div>
-      <br />
-      <div class="text-purple">
-        For Payment Please Contact the Office or Pay via Online Payment through KBZPay of Account Name SEB Team, Account number 09979920836.
-      </div>
-      <div class="text-danger">
-        * Please Pay Before Due Date {{ selectedBill?.dueDate | date: 'dd/MM/yyyy' }} if late the Fines fee of 5000 MMK will be charged for extra and electricity will be cut off.<br />
-      </div>
-      <div class="text-primary">
-        Thank you for using our service and we will always bring what is the best for our customers. <i class="fa-regular fa-handshake"></i><br />
-      </div>
-      <br />
-      <div class="text-center text-success">
-       Solar Electricity Management System
+      <div class="col-6">
+        <span class="text-danger">{{ currentDate }}</span>
       </div>
     </div>
-    <p-footer>
-      <div class="button-container">
-        <button type="button" pButton label="Print" icon="pi pi-print" (click)="printBill()" class="btn print-btn"></button>
-        <button type="button" pButton label="Close" icon="pi pi-times" (click)="closePopup()" class="btn close-btn"></button>
+    <div class="row">
+      <div class="col-6">
+        <span class="text-purple">Owner:</span>
       </div>
-    </p-footer>
-  </p-dialog> 
+      <div class="col-6">
+        <span class="text-danger">{{ selectedBill?.owner }}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <span class="text-purple">Bill Print Date:</span>
+      </div>
+      <div class="col-6">
+        <span class="text-danger">{{ selectedBill?.billDate | date: 'dd/MM/yyyy' }}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <span class="text-purple">House Name:</span>
+      </div>
+      <div class="col-6">
+        <span class="text-danger">{{ selectedBill?.housename }}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <span class="text-purple">Meter Number:</span>
+      </div>
+      <div class="col-6">
+        <span class="text-danger">{{ selectedBill.meterNumber }}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <span class="text-purple">Bill Due Date:</span>
+      </div>
+      <div class="col-6">
+        <span class="text-danger">{{ selectedBill?.dueDate | date: 'dd/MM/yyyy' }}</span>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-6">
+        <span class="text-purple">Used Unit:</span>
+      </div>
+      <div class="col-6">
+        <span class="text-danger">{{ selectedBill?.usedUnit }} Watt</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <span class="text-purple">1 unit per MMK:</span>
+      </div>
+      <div class="col-6">
+        <span class="text-danger">100 MMK</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <span class="text-purple">Tax:</span>
+      </div>
+      <div class="col-6">
+        <span class="text-danger">5%</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <span class="text-purple">Total:</span>
+      </div>
+      <div class="col-6">
+        <span class="text-danger">{{ selectedBill?.total }} MMK</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <span class="text-purple">Bill Status:</span>
+      </div>
+      <div class="col-6">
+        <span 
+          [ngClass]="{
+            'status-unpaid': selectedBill?.billStatus === 'UNPAID',
+            'status-paid': selectedBill?.billStatus === 'PAID',
+            'status-overdue': selectedBill?.billStatus === 'OVERDUE'
+          }">
+          {{ selectedBill?.billStatus }}
+        </span>
+      </div>
+    </div>
+    <br />
+    <div class="text-purple">
+      For Payment Please Contact the Office or Pay via Online Payment through KBZPay of Account Name SEB Team, Account number 09979920836.
+    </div>
+    <div class="text-danger">
+      * Please Pay Before Due Date {{ selectedBill?.dueDate | date: 'dd/MM/yyyy' }} if late the Fines fee of 5000 MMK will be charged for extra and electricity will be cut off.<br />
+    </div>
+    <div class="text-primary">
+      Thank you for using our service and we will always bring what is the best for our customers. <i class="fa-regular fa-handshake"></i><br />
+    </div>
+    <br />
+    <div class="text-center text-success">
+      Solar Electricity Management System
+    </div>
+  </div>
+  <p-footer>
+    <div class="button-container">
+      <button type="button" pButton label="Print" icon="pi pi-print" (click)="printBill()" class="btn print-btn"></button>
+      <button type="button" pButton label="Close" icon="pi pi-times" (click)="closePopup()" class="btn close-btn"></button>
+    </div>
+  </p-footer>
+</p-dialog>
+
 
   

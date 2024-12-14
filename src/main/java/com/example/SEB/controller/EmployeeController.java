@@ -38,17 +38,18 @@ private final BillService billService;
  private final UserService userService;
 
 
-     @PostMapping("/houses/create")
-      public ResponseEntity<String> createHouse(@RequestBody HouseDto houseDto) {
-        if (houseService.hasMeterNumber(houseDto.getMeterNumber())) {
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("House with this meter number already exists.");
-       }
-       HouseDto savedHouse = houseService.saveHouse(houseDto);
-       if(savedHouse == null){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("House not created");
-       }
-       return ResponseEntity.status(HttpStatus.CREATED).body("House created successfully.");
-  }
+   
+ @PostMapping("/houses/create")
+ public ResponseEntity<HouseDto> createHouse(@RequestBody HouseDto houseDto) {
+     if (houseService.hasMeterNumber(houseDto.getMeterNumber())) {
+         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+     }
+     HouseDto savedHouse = houseService.saveHouse(houseDto);
+     if (savedHouse == null) {
+         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+     }
+     return ResponseEntity.status(HttpStatus.CREATED).body(savedHouse);
+ }
 
  // Update a house
  @PostMapping("/houses/update")

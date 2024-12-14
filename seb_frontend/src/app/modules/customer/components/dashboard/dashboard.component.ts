@@ -71,16 +71,21 @@ export class DashboardComponent {
    }
 
    showBillPopup(bill :any) {
+
     this.currentDate = formatDate(new Date(), 'MMMM d, yyyy', 'en-US');
     this.selectedBill = bill; 
+
 
     const billDate = new Date(bill.billDate);
     const previousMonthName = this.getPreviousMonth(billDate);
     
     // Set the bill month title dynamically
     this.billMonthTitle = ` Monthly Payment Bill For ${previousMonthName} ${billDate.getFullYear()}`;
+  
+      this.showPopup = true;
+      //this.showPopup = false;
+
     
-    this.showPopup = true;
   }
 
   closePopup() {
